@@ -1,24 +1,8 @@
 #include "VECTOR.h"
-#include <iostream>
-#define DEBUG_MODE 1
-
-
-template<typename T>
-VECTOR<T>::VECTOR():capacity(10),size(0){
-    if(DEBUG_MODE){std::cout<<"Конструктор по умолчанию: "<<this<<std::endl;}
-    arr = new T[capacity];
-}
-
-template<typename T>
-VECTOR<T>::VECTOR(const unsigned long capacity_):capacity(capacity_+10),size(0)
-{
-    arr = new T[capacity];
-}
-
 
 template<typename T>
 VECTOR<T>::VECTOR(VECTOR &other) {
-    if(DEBUG_MODE){std::cout<<"Конструктор копирования: "<<this<<std::endl;}
+    if(DEBUG_MODE){qDebug()<<"Конструктор копирования: "<<this;}
     if(this->capacity<other.size) {
         delete [](this->arr);
         arr = new T[this->capacity = (other.size+other.size/3)+10];
@@ -35,23 +19,16 @@ VECTOR<T>::VECTOR(VECTOR &other) {
     }
 }
 
-template<typename T>
-VECTOR<T>::~VECTOR()
-{
-    if(DEBUG_MODE){std::cout<<"Деструктор: "<<this<<std::endl;;}
-    if(arr!=nullptr) {
-        delete [] arr;
-    }
-}
+
 
 template<typename T>
 void VECTOR<T>::push_back(const T &item)
 {
     if(this->size<this->capacity){
-         if(DEBUG_MODE){std::cout<<"push_back(): "<<this<<std::endl;;}
+         if(DEBUG_MODE){qDebug()<<"push_back(): "<<this;}
         arr[size++] = item;
     }else {
-         if(DEBUG_MODE){std::cout<<"Релокация после push_back(): "<<this<<std::endl;}
+         if(DEBUG_MODE){qDebug()<<"Релокация после push_back(): "<<this;}
         T *temp = new T[this->capacity+=capacity/3+10];
         for(int i = 0; i<this->size;++i)
         {
@@ -67,7 +44,7 @@ void VECTOR<T>::push_back(const T &item)
 template<typename T>
 void VECTOR<T>::erase(const unsigned long index)
 {
-     if(DEBUG_MODE){std::cout<<"erase(): "<<this<<std::endl;}
+     if(DEBUG_MODE){qDebug()<<"erase(): "<<this;}
     auto iterator = this->begin();
     iterator+=index;
     for(;iterator<this->end()-1;++iterator)
@@ -80,7 +57,7 @@ void VECTOR<T>::erase(const unsigned long index)
 template<typename T>
 void VECTOR<T>::insert(const unsigned long index,const T&item)
 {
-    if(DEBUG_MODE){std::cout<<"insert(): "<<this<<std::endl;}
+    if(DEBUG_MODE){qDebug()<<"insert(): "<<this;}
     auto iterator = this->begin();
     iterator+=index;
     if(this->size<this->capacity)
@@ -103,17 +80,6 @@ void VECTOR<T>::insert(const unsigned long index,const T&item)
 
 }
 
-template<typename T>
-typename VECTOR<T>::ITERATOR VECTOR<T>::begin()
-{
-    return VECTOR<T>::ITERATOR(this->arr,this);
-}
-
-template<typename T>
-typename VECTOR<T>::ITERATOR VECTOR<T>::end()
-{
-    return VECTOR<T>::ITERATOR((this->arr+this->size),this);
-}
 
 template<typename T>
 void VECTOR<T>::relocate(const unsigned long newSize)
@@ -125,33 +91,21 @@ void VECTOR<T>::relocate(const unsigned long newSize)
     }
     delete [](this->arr);
     this->arr = temp;
-    this->size = (this->size<newSize?:newSize);
-}
-
-template<typename T>
-VECTOR<T>::ITERATOR::ITERATOR():iter(nullptr),pointerVECTOR(nullptr){
-    if(DEBUG_MODE){std::cout<<"Конструктор по умолчанию VECTOR<T>ITERATOT"<<this<<std::endl;}
-}
-
-template<typename T>
-VECTOR<T>::ITERATOR::ITERATOR(ITERATOR &other){
-    if(DEBUG_MODE){std::cout<<"Конструктор копирования VECTOR<T>ITERATOT"<<this<<std::endl;}
-    this->iter = other.iter;
-    this->pointerVECTOR = other.pointerVECTOR;
+    this->size = (this->size<newSize?this->size:newSize);
 }
 
 template<typename T>
 typename VECTOR<T>::ITERATOR& VECTOR<T>::ITERATOR::operator++()
 {
-    if(DEBUG_MODE){std::cout<<"Инкримент VECTOR<T>::ITERATOR& VECTOR<T>::ITERATOR::operator++() "<<std::endl;}
+    if(DEBUG_MODE){qDebug()<<"Инкримент VECTOR<T>::ITERATOR& VECTOR<T>::ITERATOR::operator++() ";}
     if(this->iter==nullptr) {
-        if(DEBUG_MODE){std::cout<<"Segmentation fault. VECTOR<T>::ITERATOR указывает на NULL.\n"<<std::endl;}
+        if(DEBUG_MODE){qDebug()<<"Segmentation fault. VECTOR<T>::ITERATOR указывает на NULL.\n";}
         throw "Segmentation fault. VECTOR<T>::ITERATOR указывает на NULL.\n";
     } else if(this->iter>=this->pointerVECTOR->end()){
-        if(DEBUG_MODE){std::cout<<"Segmentation fault. VECTOR<T>::ITERATOR указывает на несуществующий элемент массива, Iterator>=&(arr[size]).\n"<<std::endl;}
+        if(DEBUG_MODE){qDebug()<<"Segmentation fault. VECTOR<T>::ITERATOR указывает на несуществующий элемент массива, Iterator>=&(arr[size]).\n";}
         throw "Segmentation fault. VECTOR<T>::ITERATOR указывает на несуществующий элемент массива, Iterator>=&(arr[size]).\n";
     }else if(this->iter<(this->pointerVECTOR)->arr){
-        if(DEBUG_MODE){std::cout<<"Segmentation fault. VECTOR<T>::ITERATOR указывает на несуществующий элемент массива.Iterator<arr\n"<<std::endl;}
+        if(DEBUG_MODE){qDebug()<<"Segmentation fault. VECTOR<T>::ITERATOR указывает на несуществующий элемент массива.Iterator<arr\n";}
         throw "Segmentation fault. VECTOR<T>::ITERATOR указывает на несуществующий элемент массива.Iterator<arr\n";
     }
     return ++(this->iter);
@@ -160,15 +114,15 @@ typename VECTOR<T>::ITERATOR& VECTOR<T>::ITERATOR::operator++()
 template<typename T>
 typename VECTOR<T>::ITERATOR &VECTOR<T>::ITERATOR::operator--()
 {
-    if(DEBUG_MODE){std::cout<<"Декримент VECTOR<T>::ITERATOR& VECTOR<T>::ITERATOR::operator--()\n"<<std::endl;}
+    if(DEBUG_MODE){qDebug()<<"Декримент VECTOR<T>::ITERATOR& VECTOR<T>::ITERATOR::operator--()\n";}
     if(this->iter==nullptr) {
-        if(DEBUG_MODE){std::cout<<"Segmentation fault. VECTOR<T>::ITERATOR указывает на NULL.\n"<<std::endl;}
+        if(DEBUG_MODE){qDebug()<<"Segmentation fault. VECTOR<T>::ITERATOR указывает на NULL.\n";}
         throw "Segmentation fault. VECTOR<T>::ITERATOR указывает на NULL.\n";
     } else if(this->iter>this->pointerVECTOR->end()){
-        if(DEBUG_MODE){std::cout<<"Segmentation fault. VECTOR<T>::ITERATOR указывает на несуществующий элемент массива, Iterator>=&(arr[size]).\n"<<std::endl;}
+        if(DEBUG_MODE){qDebug()<<"Segmentation fault. VECTOR<T>::ITERATOR указывает на несуществующий элемент массива, Iterator>=&(arr[size]).\n";}
         throw "Segmentation fault. VECTOR<T>::ITERATOR указывает на несуществующий элемент массива, Iterator>&(arr[size]).\n";
     }else if(this->iter<=(this->pointerVECTOR)->arr){
-        if(DEBUG_MODE){std::cout<<"Segmentation fault. VECTOR<T>::ITERATOR указывает на несуществующий элемент массива.Iterator<arr\n"<<std::endl;}
+        if(DEBUG_MODE){qDebug()<<"Segmentation fault. VECTOR<T>::ITERATOR указывает на несуществующий элемент массива.Iterator<arr\n";}
         throw "Segmentation fault. VECTOR<T>::ITERATOR указывает на несуществующий элемент массива.Iterator<=arr\n";
     }
     return --(this->iter);
@@ -178,17 +132,10 @@ typename VECTOR<T>::ITERATOR &VECTOR<T>::ITERATOR::operator--()
 template<typename T>
 typename VECTOR<T>::ITERATOR VECTOR<T>::ITERATOR::operator=(ITERATOR &other)
 {
-    if(DEBUG_MODE){std::cout<<"Оператор присваивания VECTOR<T>ITERATOT"<<std::endl;}
+    if(DEBUG_MODE){qDebug()<<"Оператор присваивания VECTOR<T>ITERATOT";}
     this->iter = other.iter;
     this->pointerVECTOR = other.pointerVECTOR;
     return *this;
-}
-
-template<typename T>
-VECTOR<T>::ITERATOR::ITERATOR(T *iter_, VECTOR<T> *pointerVECTOR_)
-{
-    this->iter = iter_;
-    this->pointerVECTOR = pointerVECTOR_;
 }
 
 template<typename T>
@@ -225,15 +172,15 @@ bool VECTOR<T>::ITERATOR::operator>=(ITERATOR &other){
 template<typename T>
 typename VECTOR<T>::ITERATOR &VECTOR<T>::ITERATOR::operator-(const unsigned long offset)
 {
-    if(DEBUG_MODE){std::cout<<"Декримент VECTOR<T>::ITERATOR& VECTOR<T>::ITERATOR::operator-(offset)\n"<<std::endl;}
+    if(DEBUG_MODE){qDebug()<<"Декримент VECTOR<T>::ITERATOR& VECTOR<T>::ITERATOR::operator-(offset)\n";}
     if(this->iter==nullptr) {
-        if(DEBUG_MODE){std::cout<<"Segmentation fault. VECTOR<T>::ITERATOR указывает на NULL.\n"<<std::endl;}
+        if(DEBUG_MODE){qDebug()<<"Segmentation fault. VECTOR<T>::ITERATOR указывает на NULL.\n";}
         throw "Segmentation fault. VECTOR<T>::ITERATOR указывает на NULL.\n";
     } else if(this->iter-offset>this->pointerVECTOR->end()){
-        if(DEBUG_MODE){std::cout<<"Segmentation fault. VECTOR<T>::ITERATOR указывает на несуществующий элемент массива, Iterator>=&(arr[size]).\n"<<std::endl;}
+        if(DEBUG_MODE){qDebug()<<"Segmentation fault. VECTOR<T>::ITERATOR указывает на несуществующий элемент массива, Iterator>=&(arr[size]).\n";}
         throw "Segmentation fault. VECTOR<T>::ITERATOR указывает на несуществующий элемент массива, Iterator-offset>&(arr[size]).\n";
     }else if(this->iter-offset<(this->pointerVECTOR)->arr){
-        if(DEBUG_MODE){std::cout<<"Segmentation fault. VECTOR<T>::ITERATOR указывает на несуществующий элемент массива.Iterator<arr\n"<<std::endl;}
+        if(DEBUG_MODE){qDebug()<<"Segmentation fault. VECTOR<T>::ITERATOR указывает на несуществующий элемент массива.Iterator<arr\n";}
         throw "Segmentation fault. VECTOR<T>::ITERATOR указывает на несуществующий элемент массива.Iterator-offset<arr\n";
     }
     return (this->iter-offset);
@@ -242,15 +189,15 @@ typename VECTOR<T>::ITERATOR &VECTOR<T>::ITERATOR::operator-(const unsigned long
 template<typename T>
 typename VECTOR<T>::ITERATOR &VECTOR<T>::ITERATOR::operator+(const unsigned long offset)
 {
-    if(DEBUG_MODE){std::cout<<"Декримент VECTOR<T>::ITERATOR& VECTOR<T>::ITERATOR::operator+(offset)\n"<<std::endl;}
+    if(DEBUG_MODE){qDebug()<<"Декримент VECTOR<T>::ITERATOR& VECTOR<T>::ITERATOR::operator+(offset)\n";}
     if(this->iter==nullptr) {
-        if(DEBUG_MODE){std::cout<<"Segmentation fault. VECTOR<T>::ITERATOR указывает на NULL.\n"<<std::endl;}
+        if(DEBUG_MODE){qDebug()<<"Segmentation fault. VECTOR<T>::ITERATOR указывает на NULL.\n";}
         throw "Segmentation fault. VECTOR<T>::ITERATOR указывает на NULL.\n";
     } else if(this->iter+offset>=this->pointerVECTOR->end()){
-        if(DEBUG_MODE){std::cout<<"Segmentation fault. VECTOR<T>::ITERATOR указывает на несуществующий элемент массива, Iterator>=&(arr[size]).\n"<<std::endl;}
+        if(DEBUG_MODE){qDebug()<<"Segmentation fault. VECTOR<T>::ITERATOR указывает на несуществующий элемент массива, Iterator>=&(arr[size]).\n";}
         throw "Segmentation fault. VECTOR<T>::ITERATOR указывает на несуществующий элемент массива, Iterator+offset=>&(arr[size]).\n";
     }else if(this->iter+offset<(this->pointerVECTOR)->arr){
-        if(DEBUG_MODE){std::cout<<"Segmentation fault. VECTOR<T>::ITERATOR указывает на несуществующий элемент массива.Iterator<arr\n"<<std::endl;}
+        if(DEBUG_MODE){qDebug()<<"Segmentation fault. VECTOR<T>::ITERATOR указывает на несуществующий элемент массива.Iterator<arr\n";}
         throw "Segmentation fault. VECTOR<T>::ITERATOR указывает на несуществующий элемент массива.Iterator+offset<=arr\n";
     }
     return (this->iter+offset);
