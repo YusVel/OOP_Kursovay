@@ -1,4 +1,8 @@
 #include "VECTOR.h"
+#include "CAR.h"
+template<>
+class VECTOR<CAR>
+{
 
-//мне не удалось разделить шаблонный класс на 2 файла(*.h и *.cpp) из-за проблем c линковщиком
+};
 
