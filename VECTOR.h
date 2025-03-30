@@ -22,6 +22,7 @@ private:
         ITERATOR(ITERATOR &other);
         ITERATOR(T *iter_,VECTOR<T> *pointerVECTOR_);
         ~ITERATOR(){if(DEBUG_MODE){qDebug()<<"Деструктор ~ITERATOR() : "<<this;}}
+        T* getRowPointer(){return this->iter; }
         VECTOR<T>::ITERATOR& operator=(ITERATOR other);
         VECTOR<T>::ITERATOR& operator++();
         VECTOR<T>::ITERATOR& operator--();
@@ -38,11 +39,14 @@ private:
         T&operator*();
     };
 
+
 public:
     VECTOR();
     VECTOR(const unsigned long capacity_);
     VECTOR(VECTOR &other);
     ~VECTOR();
+    unsigned long getSize();
+    unsigned long getCapacity();
     void push_back(const T &item);
     void pop_back();
     void erase(const unsigned long index);
@@ -51,12 +55,17 @@ public:
     VECTOR<T>::ITERATOR end();
     void sort_increase(int parametr=-1);//todo
     void sort_decrease(int parametr=-1);//todo
+    T&operator[]( const long index);
+
 private:
     void relocate(const unsigned long newSize);
+    bool makeMaxParentBySwap(T&parent, T&leftChild, T&rightChild);
+    void makeHeap(int &lastParentIndex);
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 template<typename T>
 VECTOR<T>::VECTOR():capacity(10),size(0){
@@ -101,6 +110,16 @@ VECTOR<T>::~VECTOR()
     if(arr!=nullptr) {
         delete [] arr;
     }
+}
+
+template<typename T>
+inline unsigned long VECTOR<T>::getSize(){
+    return this->size;
+}
+
+template<typename T>
+inline unsigned long VECTOR<T>::getCapacity(){
+    return this->capacity;
 }
 
 template<typename T>
@@ -186,6 +205,27 @@ typename VECTOR<T>::ITERATOR VECTOR<T>::end(){
 }
 
 template<typename T>
+inline void VECTOR<T>::sort_increase(int parametr)
+{
+    int lastParentIndex;
+    if((size-1)%2==0){lastParentIndex=(size-1-2)/2;}
+    else{lastParentIndex=(size-1-1)/2;}
+    makeHeap(lastParentIndex);
+/*
+    long sortindexes = 1;
+    while(this->size-sortindexes>0)
+    {
+        makeMaxParentBySwap(this->arr[size-sortindexes],this->arr[1],this->arr[1]);
+        while()
+        {
+            //todo;
+        }
+    }
+*/
+
+}
+
+template<typename T>
 void VECTOR<T>::relocate(const unsigned long newSize)
 {
     T *temp = new T[this->capacity = (newSize+newSize/3)];
@@ -196,6 +236,56 @@ void VECTOR<T>::relocate(const unsigned long newSize)
     delete [](this->arr);
     this->arr = temp;
     this->size = (this->size<newSize? this->size:newSize);
+}
+
+template<typename T>
+inline  bool VECTOR<T>::makeMaxParentBySwap(T &parent, T &leftChild, T &rightChild){
+    T max =(parent>leftChild?(parent>rightChild?parent:rightChild):(leftChild>rightChild?leftChild:rightChild));
+    if(max==leftChild)
+    {
+        leftChild=parent;
+        parent = max;
+        return true;
+    }
+    else if(max==rightChild)
+    {
+        rightChild=parent;
+        parent = max;
+        return true;
+    }
+    return false;
+}
+
+template<typename T>
+inline void VECTOR<T>::makeHeap(int &lastParentIndex)
+{
+    long index = lastParentIndex;
+    if((size-1)%2==0)
+    {
+        while(index>=0)
+        {
+            makeMaxParentBySwap(this->arr[index],arr[index*2+1],arr[index*2+2]);
+            --index;
+        }
+    }
+    else
+    {
+        if(index==lastParentIndex){
+            makeMaxParentBySwap(this->arr[index],arr[index*2+1],arr[index*2+1]);
+            --index;
+        }
+        while(index>=0)
+        {
+            makeMaxParentBySwap(this->arr[index],arr[index*2+1],arr[index*2+2]);
+            --index;
+        }
+    }
+}
+
+template<typename T>
+inline T &VECTOR<T>::operator[](const long index)
+{
+    return (this->arr[index]);
 }
 
 template<typename T>
