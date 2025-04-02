@@ -59,8 +59,8 @@ public:
 
 private:
     void relocate(const unsigned long newSize);
-    bool makeMaxParentBySwap(T&parent, T&leftChild, T&rightChild);
-    void makeHeap(int &lastParentIndex);
+    bool makeMaxOrMinParentBySwap(T&parent, T&leftChild, T&rightChild, int &chanchedChild, int increaseOrdecrease);
+    void makeHeap(int &lastParentIndex,const int unsortSize,  int increaseOrdecrease);
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -210,19 +210,29 @@ inline void VECTOR<T>::sort_increase(int parametr)
     int lastParentIndex;
     if((size-1)%2==0){lastParentIndex=(size-1-2)/2;}
     else{lastParentIndex=(size-1-1)/2;}
-    makeHeap(lastParentIndex);
-/*
-    long sortindexes = 1;
-    while(this->size-sortindexes>0)
+    int g = 0;
+    for(int unsortSize = this->size;unsortSize>0;--unsortSize)
     {
-        makeMaxParentBySwap(this->arr[size-sortindexes],this->arr[1],this->arr[1]);
-        while()
-        {
-            //todo;
-        }
+        makeHeap(lastParentIndex,unsortSize,1);
+        lastParentIndex = 0;
+        makeMaxOrMinParentBySwap(this->arr[unsortSize-1],this->arr[0],this->arr[0],g,1 );
     }
-*/
 
+}
+
+template<typename T>
+inline void VECTOR<T>::sort_decrease(int parametr)
+{
+    int lastParentIndex;
+    if((size-1)%2==0){lastParentIndex=(size-1-2)/2;}
+    else{lastParentIndex=(size-1-1)/2;}
+    int g = 0;
+    for(int unsortSize = this->size;unsortSize>0;--unsortSize)
+    {
+        makeHeap(lastParentIndex,unsortSize,0);
+        lastParentIndex = 0;
+        makeMaxOrMinParentBySwap(this->arr[unsortSize-1],this->arr[0],this->arr[0],g,0 );
+    }
 }
 
 template<typename T>
@@ -239,45 +249,67 @@ void VECTOR<T>::relocate(const unsigned long newSize)
 }
 
 template<typename T>
-inline  bool VECTOR<T>::makeMaxParentBySwap(T &parent, T &leftChild, T &rightChild){
-    T max =(parent>leftChild?(parent>rightChild?parent:rightChild):(leftChild>rightChild?leftChild:rightChild));
-    if(max==leftChild)
+inline  bool VECTOR<T>::makeMaxOrMinParentBySwap(T &parent, T &leftChild, T &rightChild, int &chanchedChild, int increaseOrdecrease){
+    T maxOrmin;
+    if(increaseOrdecrease<=0)
+    {
+        maxOrmin =(parent<leftChild?(parent<rightChild?parent:rightChild):(leftChild<rightChild?leftChild:rightChild));
+    }
+    else
+    {
+        maxOrmin =(parent>leftChild?(parent>rightChild?parent:rightChild):(leftChild>rightChild?leftChild:rightChild));
+    }
+    if(maxOrmin==leftChild)
     {
         leftChild=parent;
-        parent = max;
+        parent = maxOrmin;
+        chanchedChild=1;
         return true;
     }
-    else if(max==rightChild)
+    else if(maxOrmin==rightChild)
     {
         rightChild=parent;
-        parent = max;
+        parent = maxOrmin;
+        chanchedChild=2;
         return true;
     }
     return false;
 }
 
 template<typename T>
-inline void VECTOR<T>::makeHeap(int &lastParentIndex)
+inline void VECTOR<T>::makeHeap(int &lastParentIndex, const int unsortSize,  int increaseOrdecrease)
 {
-    long index = lastParentIndex;
-    if((size-1)%2==0)
+    int chanchedChild = 0;
+    long parent = lastParentIndex;
+    if((unsortSize-1)%2==0)
     {
-        while(index>=0)
+        while(parent>=0)
         {
-            makeMaxParentBySwap(this->arr[index],arr[index*2+1],arr[index*2+2]);
-            --index;
+            int tempParent = parent;
+            while(parent*2+2<unsortSize&&makeMaxOrMinParentBySwap(this->arr[parent],arr[parent*2+1],arr[parent*2+2],chanchedChild,increaseOrdecrease))
+            {
+                if(chanchedChild==1){parent=parent*2+1;}
+                else if (chanchedChild == 2){parent=parent*2+2;}
+            }
+            --(parent=tempParent);
         }
     }
     else
     {
-        if(index==lastParentIndex){
-            makeMaxParentBySwap(this->arr[index],arr[index*2+1],arr[index*2+1]);
-            --index;
+        if(parent==(unsortSize-2)/2){
+            if(makeMaxOrMinParentBySwap(this->arr[parent],arr[parent*2+1],arr[parent*2+1],chanchedChild,increaseOrdecrease)){--parent;}
+            if(chanchedChild==1){parent =parent*2+1;}
+            else if (chanchedChild == 2){parent=parent*2+2;}
         }
-        while(index>=0)
+        while(parent>=0)
         {
-            makeMaxParentBySwap(this->arr[index],arr[index*2+1],arr[index*2+2]);
-            --index;
+            int tempParent = parent;
+            while(parent*2+2<unsortSize&&makeMaxOrMinParentBySwap(this->arr[parent],arr[parent*2+1],arr[parent*2+2],chanchedChild,increaseOrdecrease))
+            {
+                if(chanchedChild==1){parent =parent*2+1;}
+                else if (chanchedChild == 2){parent=parent*2+2;}
+            }
+            --(parent=tempParent);
         }
     }
 }

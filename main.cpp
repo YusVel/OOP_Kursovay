@@ -24,17 +24,17 @@ int main(int argc, char *argv[])
        qDebug()<<two.getFuelRateStr();
        qDebug()<<two.getClearenceStr();
     */
-        int N = 10;
+        int N = 100;
         VECTOR<int> v(N);
 
         for(int i = 0;i<N;i++)
         {
             int j = std::rand()%100;
             v.push_back(j);
-            qDebug()<<"["<<i<<"]  "<<v[i];
+           // qDebug()<<"["<<i<<"]  "<<v[i];
         }
         qDebug()<<"**************";
-        v.sort_increase();
+        v.sort_decrease();
         for(int i = 0;i<N;i++)
         {
             qDebug()<<"["<<i<<"]  "<<v[i];
