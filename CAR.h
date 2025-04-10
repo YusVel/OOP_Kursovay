@@ -1,12 +1,12 @@
 #ifndef CAR_H
 #define CAR_H
-#include "VECTOR.h"
 #include <QWidget>
 #include <QStringList>
 #include <QString>
 #include <QFormLayout>
 #include <QFile>
 #include <QTextStream>
+#include <QDataStream>
 #define MAX_SPEC 9
 enum SPECIFICATIONS
 {
@@ -27,13 +27,13 @@ private:
     ushort *spec;
     QStringList *picturesPath;
 public:
+    static unsigned int carsQuantity;
+    static QStringList listModels;
+
     CAR();
     CAR(CAR &other);
     CAR& operator=(const CAR &other);
     ~CAR();
-    static unsigned int carsQuantity;
-    static QStringList listModels;
-
     void setBrand(ushort brandModel);
     void setYearOfManufacture(ushort yearOfManufacture);
     void setPrice(ushort price);
@@ -54,6 +54,8 @@ public:
     QString getFuelRateStr();
     QString getClearenceStr();
 
+    ushort getSpecs(SPECIFICATIONS index);
+
     ushort getBrand();
     ushort getYearOfManufacture();
     ushort getPrice();
@@ -63,10 +65,42 @@ public:
     ushort getAcceleration();
     ushort getFuelRate();
     ushort getClearence();
-
+    CAR& randomize(long rand);
     QString getBrandModel();
     void addNewBrandModel(QString newBrandModel);
 
+    friend QDebug operator<<(QDebug stream, CAR &item)
+    {
+        stream<<item.getBrandModel()<<'\t'
+               <<item.getYearOfManufacture()<<" "
+               <<item.getPrice()<<" "
+               <<item.getEngineCapacity()<<" "
+               <<item.getPower()<<" "
+               <<item.getMaxSpeed()<<" "
+               <<item.getAcceleration()<<" "
+               <<item.getFuelRate()<<" "
+               <<item.getClearence()<<"\n";
+        return stream;
+    }
+    friend QDataStream& operator<<(QDataStream& stream, CAR &item)
+    {
+        for(int i = 0;i<MAX_SPEC;i++)
+        {
+            stream<<item.spec[i];
+        }
+        stream<<*(item.picturesPath);
+        return stream;
+    }
+
+    friend QDataStream& operator>>(QDataStream& stream, CAR &item)
+    {
+        for(int i = 0;i<MAX_SPEC;i++)
+        {
+            stream>>item.spec[i];
+        }
+        stream>>*(item.picturesPath);
+        return stream;
+    }
 };
 
 #endif // CAR_H

@@ -18,13 +18,13 @@ CAR::CAR() {
         QTextStream in(&file);
         while(in.readLineInto(&temp))
         {
-
             listModels.append(temp);
         }
         file.close();
     }
     carsQuantity++;
 }
+
 
 CAR::CAR(CAR &other)
 {
@@ -149,8 +149,11 @@ QString CAR::getClearenceStr()
 {
     return QString("%1 мм.").arg(spec[FUEL_RATE]);
 }
-
-
+//////////////////////////////////////////////////////////
+ushort CAR::getSpecs(SPECIFICATIONS index)
+{
+    return this->spec[index];
+}
 
 //////////////////////////////////////////////////////////
 ushort CAR::getBrand(){
@@ -188,10 +191,23 @@ ushort CAR::getFuelRate(){
 ushort CAR::getClearence(){
     return this->spec[CLEARENCE];
 }
+/////////////////////////////
+CAR& CAR::randomize(long rand)
+{
+    std::srand(rand);
+    this->spec[BRAND_MODEL] = std::rand()%CAR::listModels.size();
+    this->spec[YEAR_OF_MANUFACTURE] = std::rand()%30+1994;
+    this->spec[PRICE] = std::rand()%55000+10000;
+    this->spec[ENGINE_CAPACITY] = std::rand()%3000+1000;
+    this->spec[POWER] = std::rand()%200+70;
+    this->spec[MAX_SPEED] = std::rand()%170+100;
+    this->spec[ACCELERATION] = std::rand()%10000+2000;
+    this->spec[FUEL_RATE] = std::rand()%10000+5000;
+    this->spec[CLEARENCE] = std::rand()%200+100;
+    return *this;
+}
 
-///
-
-
+////////////////////////////
 
 QString CAR::getBrandModel()
 {

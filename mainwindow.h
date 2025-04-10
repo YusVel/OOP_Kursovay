@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "CAR.h"
+#include "VECTOR.h"
 
 class MainWindow : public QMainWindow
 {

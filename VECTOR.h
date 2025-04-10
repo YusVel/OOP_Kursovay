@@ -1,5 +1,6 @@
 #define DEBUG_MODE 0
 #include <QWidget>
+#include "CAR.h"
 
 #ifndef VECTOR_H
 #define VECTOR_H
@@ -53,14 +54,16 @@ public:
     void insert(const unsigned long index, const T&item);
     VECTOR<T>::ITERATOR begin();
     VECTOR<T>::ITERATOR end();
-    void sort_increase(int parametr=-1);//todo
-    void sort_decrease(int parametr=-1);//todo
+    void sort_increase(int parametr=0);//
+    void sort_decrease(int parametr=0);//
     T&operator[]( const long index);
+    void writeToFile(const QString &pathToFile);
+    void readFromFile(QString pathToFile);
 
 private:
     void relocate(const unsigned long newSize);
-    bool makeMaxOrMinParentBySwap(T&parent, T&leftChild, T&rightChild, int &chanchedChild, int increaseOrdecrease);
-    void makeHeap(int &lastParentIndex,const int unsortSize,  int increaseOrdecrease);
+    bool makeMaxOrMinParentBySwap(T&parent, T&leftChild, T&rightChild, int &chanchedChild, int increaseOrdecrease, int parametr);
+    void makeHeap(int &lastParentIndex,const int unsortSize,  int increaseOrdecrease, int parametr);
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -76,7 +79,7 @@ VECTOR<T>::VECTOR():capacity(10),size(0){
 }
 
 template<typename T>
-VECTOR<T>::VECTOR(const unsigned long capacity_):capacity(capacity_+5),size(0){\
+VECTOR<T>::VECTOR(const unsigned long capacity_):capacity(capacity_),size(capacity_){\
         if (DEBUG_MODE) {
         qDebug() << "Конструктор VECTOR(const unsigned long capacity_): " << this;
     }
@@ -213,9 +216,9 @@ inline void VECTOR<T>::sort_increase(int parametr)
     int g = 0;
     for(int unsortSize = this->size;unsortSize>0;--unsortSize)
     {
-        makeHeap(lastParentIndex,unsortSize,1);
+        makeHeap(lastParentIndex,unsortSize,1,parametr);
         lastParentIndex = 0;
-        makeMaxOrMinParentBySwap(this->arr[unsortSize-1],this->arr[0],this->arr[0],g,1 );
+        makeMaxOrMinParentBySwap(this->arr[unsortSize-1],this->arr[0],this->arr[0],g,1,parametr );
     }
 
 }
@@ -229,9 +232,9 @@ inline void VECTOR<T>::sort_decrease(int parametr)
     int g = 0;
     for(int unsortSize = this->size;unsortSize>0;--unsortSize)
     {
-        makeHeap(lastParentIndex,unsortSize,0);
+        makeHeap(lastParentIndex,unsortSize,0,parametr);
         lastParentIndex = 0;
-        makeMaxOrMinParentBySwap(this->arr[unsortSize-1],this->arr[0],this->arr[0],g,0 );
+        makeMaxOrMinParentBySwap(this->arr[unsortSize-1],this->arr[0],this->arr[0],g,0,parametr);
     }
 }
 
@@ -249,7 +252,7 @@ void VECTOR<T>::relocate(const unsigned long newSize)
 }
 
 template<typename T>
-inline  bool VECTOR<T>::makeMaxOrMinParentBySwap(T &parent, T &leftChild, T &rightChild, int &chanchedChild, int increaseOrdecrease){
+inline  bool VECTOR<T>::makeMaxOrMinParentBySwap(T &parent, T &leftChild, T &rightChild, int &chanchedChild, int increaseOrdecrease, int parametr){
     T maxOrmin;
     if(increaseOrdecrease<=0)
     {
@@ -275,9 +278,54 @@ inline  bool VECTOR<T>::makeMaxOrMinParentBySwap(T &parent, T &leftChild, T &rig
     }
     return false;
 }
+/////////Специализируем шаблончик////////////////
+template<>
+inline  bool VECTOR<CAR>::makeMaxOrMinParentBySwap(CAR &parent, CAR &leftChild, CAR &rightChild, int &chanchedChild, int increaseOrdecrease, int parametr){
+    CAR maxOrmin;
+
+    if(increaseOrdecrease<=0)
+    {
+        if(parametr==0)
+        {
+            maxOrmin =(parent.getBrandModel()<leftChild.getBrandModel()?(parent.getBrandModel()<rightChild.getBrandModel()?parent:rightChild):(leftChild.getBrandModel()<rightChild.getBrandModel()?leftChild:rightChild));
+        }
+        else
+        {
+            maxOrmin =(parent.getSpecs((SPECIFICATIONS)parametr)<leftChild.getSpecs((SPECIFICATIONS)parametr)?(parent.getSpecs((SPECIFICATIONS)parametr)<rightChild.getSpecs((SPECIFICATIONS)parametr)?parent:rightChild):(leftChild.getSpecs((SPECIFICATIONS)parametr)<rightChild.getSpecs((SPECIFICATIONS)parametr)?leftChild:rightChild));
+        }
+    }
+    else
+    {
+        if(parametr==0)
+        {
+            maxOrmin =(parent.getBrandModel()>leftChild.getBrandModel()?(parent.getBrandModel()>rightChild.getBrandModel()?parent:rightChild):(leftChild.getBrandModel()>rightChild.getBrandModel()?leftChild:rightChild));
+        }
+        else
+        {
+            maxOrmin =(parent.getSpecs((SPECIFICATIONS)parametr)>leftChild.getSpecs((SPECIFICATIONS)parametr)?(parent.getSpecs((SPECIFICATIONS)parametr)>rightChild.getSpecs((SPECIFICATIONS)parametr)?parent:rightChild):(leftChild.getSpecs((SPECIFICATIONS)parametr)>rightChild.getSpecs((SPECIFICATIONS)parametr)?leftChild:rightChild));
+        }
+    }
+    if(maxOrmin.getSpecs((SPECIFICATIONS)parametr)==leftChild.getSpecs((SPECIFICATIONS)parametr))
+    {
+        leftChild=parent;
+        parent = maxOrmin;
+        chanchedChild=1;
+        return true;
+    }
+    else if(maxOrmin.getSpecs((SPECIFICATIONS)parametr)==rightChild.getSpecs((SPECIFICATIONS)parametr))
+    {
+        rightChild=parent;
+        parent = maxOrmin;
+        chanchedChild=2;
+        return true;
+    }
+    return false;
+}
+
+
 
 template<typename T>
-inline void VECTOR<T>::makeHeap(int &lastParentIndex, const int unsortSize,  int increaseOrdecrease)
+inline void VECTOR<T>::makeHeap(int &lastParentIndex, const int unsortSize,  int increaseOrdecrease, int parametr)
 {
     int chanchedChild = 0;
     long parent = lastParentIndex;
@@ -286,7 +334,7 @@ inline void VECTOR<T>::makeHeap(int &lastParentIndex, const int unsortSize,  int
         while(parent>=0)
         {
             int tempParent = parent;
-            while(parent*2+2<unsortSize&&makeMaxOrMinParentBySwap(this->arr[parent],arr[parent*2+1],arr[parent*2+2],chanchedChild,increaseOrdecrease))
+            while(parent*2+2<unsortSize&&makeMaxOrMinParentBySwap(this->arr[parent],arr[parent*2+1],arr[parent*2+2],chanchedChild,increaseOrdecrease,parametr))
             {
                 if(chanchedChild==1){parent=parent*2+1;}
                 else if (chanchedChild == 2){parent=parent*2+2;}
@@ -297,14 +345,14 @@ inline void VECTOR<T>::makeHeap(int &lastParentIndex, const int unsortSize,  int
     else
     {
         if(parent==(unsortSize-2)/2){
-            if(makeMaxOrMinParentBySwap(this->arr[parent],arr[parent*2+1],arr[parent*2+1],chanchedChild,increaseOrdecrease)){--parent;}
+            if(makeMaxOrMinParentBySwap(this->arr[parent],arr[parent*2+1],arr[parent*2+1],chanchedChild,increaseOrdecrease,parametr)){--parent;}
             if(chanchedChild==1){parent =parent*2+1;}
             else if (chanchedChild == 2){parent=parent*2+2;}
         }
         while(parent>=0)
         {
             int tempParent = parent;
-            while(parent*2+2<unsortSize&&makeMaxOrMinParentBySwap(this->arr[parent],arr[parent*2+1],arr[parent*2+2],chanchedChild,increaseOrdecrease))
+            while(parent*2+2<unsortSize&&makeMaxOrMinParentBySwap(this->arr[parent],arr[parent*2+1],arr[parent*2+2],chanchedChild,increaseOrdecrease,parametr))
             {
                 if(chanchedChild==1){parent =parent*2+1;}
                 else if (chanchedChild == 2){parent=parent*2+2;}
@@ -318,6 +366,38 @@ template<typename T>
 inline T &VECTOR<T>::operator[](const long index)
 {
     return (this->arr[index]);
+}
+
+template<typename T>
+inline void VECTOR<T>::writeToFile(const QString &pathToFile)
+{
+    QFile file(pathToFile);
+    if(!file.open(QIODeviceBase::WriteOnly))
+    {
+        throw "ERROR! VECTOR<T>::writeToFile(const QString &pathToFile)// Can not open path to file";
+    }
+    QDataStream out(&file);
+    for(int i = 0;i<this->size;++i)
+    {
+        out<<this->arr[i];
+    }
+    file.close();
+}
+
+template<typename T>
+inline void VECTOR<T>::readFromFile(QString pathToFile)
+{
+    QFile file(pathToFile);
+    if(!file.open(QIODeviceBase::ReadOnly))
+    {
+        throw "ERROR! VECTOR<T>::writeToFile(const QString &pathToFile)// Can not open path to file";
+    }
+    QDataStream in(&file);
+    for(int i = 0;i<this->size;++i)
+    {
+        in>>this->arr[i];
+    }
+    file.close();
 }
 
 template<typename T>
