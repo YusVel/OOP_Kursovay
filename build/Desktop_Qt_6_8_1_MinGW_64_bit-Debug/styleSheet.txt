@@ -1,0 +1,24 @@
+QHeaderView::section 
+{
+Font-size:10px; 
+Font-family: "Microsoft YaHei"; 
+Color: #FFFFFF; 
+Background:#9fa197; 
+Border:none; 
+Text-align:center; 
+Min-height:20px; 
+max-height:49px;
+Margin-left:0px; 
+Padding-left: 0px;
+}
+QTableView {
+    selection-background-color: #11669B;
+    Background:#d3d6d2; 
+}
+QTableView QTableCornerButton::section {
+    background: #9fa197; 
+    border: 2px outset black;
+}
+QTableView::indicator:unchecked {
+    background-color: #d7d6d5
+}

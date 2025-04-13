@@ -1,0 +1,17 @@
+# ninja log v6
+535	1720	7661983442637316	CMakeFiles/Kursovay.dir/VECTOR.cpp.obj	6f77640eb8e5b8f7
+18	81	7662474548343258	Kursovay_autogen/timestamp	ee42169699126c26
+375	1713	7662468944447271	CMakeFiles/Kursovay.dir/main.cpp.obj	ceb338e37f26688e
+81	1434	7662474548973260	CMakeFiles/Kursovay.dir/mainwindow.cpp.obj	385149c1fa53d145
+18	81	7662474548343258	Kursovay_autogen/mocs_compilation.cpp	ee42169699126c26
+18	81	7662474548343258	E:/Qtprojects/Kursovay/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/Kursovay_autogen/timestamp	ee42169699126c26
+18	81	7662474548343258	E:/Qtprojects/Kursovay/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/Kursovay_autogen/mocs_compilation.cpp	ee42169699126c26
+374	1703	7662468944427272	CMakeFiles/Kursovay.dir/Kursovay_autogen/mocs_compilation.cpp.obj	115838cb8d13ba64
+1434	1565	7662474562505044	Kursovay.exe	adffe216b7065bc7
+536	1741	7661983442647319	CMakeFiles/Kursovay.dir/CAR.cpp.obj	a0f40c5349226a47
+18	80	7662475787497496	Kursovay_autogen/timestamp	ee42169699126c26
+18	80	7662475787497496	Kursovay_autogen/mocs_compilation.cpp	ee42169699126c26
+18	80	7662475787497496	E:/Qtprojects/Kursovay/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/Kursovay_autogen/timestamp	ee42169699126c26
+18	80	7662475787497496	E:/Qtprojects/Kursovay/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/Kursovay_autogen/mocs_compilation.cpp	ee42169699126c26
+81	1421	7662475788127498	CMakeFiles/Kursovay.dir/mainwindow.cpp.obj	385149c1fa53d145
+1421	1565	7662475801538942	Kursovay.exe	adffe216b7065bc7
