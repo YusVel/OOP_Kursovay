@@ -2,8 +2,13 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QHBoxLayout>
 #include <QIcon>
+#include <QTableView>
+#include <QHeaderView>
+#include <QStandardItemModel>
 #include <QFileDialog>
+#include <QDir>
 #include <QString>
 #include <QMenuBar>
 #include <QToolBar>
@@ -17,30 +22,58 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
     QIcon *icon;
+    QString *styleSheet;
+
+    QHBoxLayout *hlayout;
+
+    QTableView *tableData;
+    QStandardItemModel *model{NULL};
 
     QStatusBar *statusBar;
+
     QToolBar *toolBar;
+    QAction *openFileTool;
+    QAction *saveFileTool;
+    QAction *saveAsFileTool;
+    QAction *addTableTool;
+    QAction *addCarTool;
+    QAction *deleteCarTool;
+    QAction *printTool;
+    QAction *helpTool;
+
     QMenuBar *mainMenuBar;
-    QMenu *fileMenu;
+
     QMenu *settingMenu;
     QMenu *helpMenu;
+
+    QMenu *fileMenu;
     QAction *openFile;
     QAction *saveFile;
     QAction *saveAsFile;
     QAction *exit;
 
     QString *pathFile;
+
+    VECTOR<CAR> DATA;
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+
+    void loadData();
 private:
    // void closeEvent(QCloseEvent *event) override;
     void setMainMenuBar();
     void setFileMenu();
     void setSettingMenu();
     void setHelpMenu();
+    void setTableView();
+    void setToolBar();
+    void setStatusBar();
+    void loadStyleSheet();
 private slots:
-    void setFileName();
+    void setFileNameToOpen();
+    void setFileNameToSave();
+    void loadDataToTable();
 
 };
 #endif // MAINWINDOW_H

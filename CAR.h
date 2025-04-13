@@ -54,6 +54,7 @@ public:
     QString getFuelRateStr();
     QString getClearenceStr();
 
+    QString getSpecsStr(int index);
     ushort getSpecs(SPECIFICATIONS index);
 
     ushort getBrand();

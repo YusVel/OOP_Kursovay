@@ -149,6 +149,22 @@ QString CAR::getClearenceStr()
 {
     return QString("%1 мм.").arg(spec[FUEL_RATE]);
 }
+
+QString CAR::getSpecsStr(int index)
+{
+    switch(index)
+    {
+    case 0: return getBrandStr(); break;
+    case 1: return getYearOfManufactureStr(); break;
+    case 2: return getPriceStr(); break;
+    case 3: return getEngineCapacityStr(); break;
+    case 4: return getPowerStr(); break;
+    case 5: return getMaxSpeedStr(); break;
+    case 6: return getAccelerationStr(); break;
+    case 7: return getFuelRateStr(); break;
+    case 8: return getClearenceStr(); break;
+    }
+}
 //////////////////////////////////////////////////////////
 ushort CAR::getSpecs(SPECIFICATIONS index)
 {

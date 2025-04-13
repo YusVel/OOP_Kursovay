@@ -393,9 +393,11 @@ inline void VECTOR<T>::readFromFile(QString pathToFile)
         throw "ERROR! VECTOR<T>::writeToFile(const QString &pathToFile)// Can not open path to file";
     }
     QDataStream in(&file);
-    for(int i = 0;i<this->size;++i)
+    CAR temp;
+    while(!in.atEnd())
     {
-        in>>this->arr[i];
+        in>>temp;
+        this->push_back(temp);
     }
     file.close();
 }
