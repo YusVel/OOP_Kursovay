@@ -112,42 +112,42 @@ QString CAR::getBrandStr(){
 
 QString CAR::getYearOfManufactureStr()
 {
-    return QString("%1 год").arg(spec[YEAR_OF_MANUFACTURE]);
+    return QString("%1").arg(spec[YEAR_OF_MANUFACTURE]);
 }
 
 QString CAR::getPriceStr()
 {
-    return QString("%1 РУБ").arg(spec[PRICE]);
+    return QString("%1").arg(spec[PRICE]);
 }
 
 QString CAR::getEngineCapacityStr()
 {
-    return QString("%1 см.куб.").arg(spec[ENGINE_CAPACITY]);
+    return QString("%1").arg(spec[ENGINE_CAPACITY]);
 }
 
 QString CAR::getPowerStr()
 {
-    return QString("%1 л.с.").arg(spec[POWER]);
+    return QString("%1").arg(spec[POWER]);
 }
 
 QString CAR::getMaxSpeedStr()
 {
-    return QString("%1 км.ч.").arg(spec[MAX_SPEED]);
+    return QString("%1").arg(spec[MAX_SPEED]);
 }
 
 QString CAR::getAccelerationStr()
 {
-    return QString("100 км.ч. за %1 мс.").arg(spec[ACCELERATION]);
+    return QString("%1").arg(spec[ACCELERATION]);
 }
 
 QString CAR::getFuelRateStr()
 {
-    return QString("на 100 км - %1 мл.").arg(spec[FUEL_RATE]);
+    return QString("%1").arg(spec[FUEL_RATE]);
 }
 
 QString CAR::getClearenceStr()
 {
-    return QString("%1 мм.").arg(spec[FUEL_RATE]);
+    return QString("%1").arg(spec[FUEL_RATE]);
 }
 
 QString CAR::getSpecsStr(int index)

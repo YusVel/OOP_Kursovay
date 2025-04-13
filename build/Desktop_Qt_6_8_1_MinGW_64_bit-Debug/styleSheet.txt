@@ -6,9 +6,9 @@ Color: #FFFFFF;
 Background:#9fa197; 
 Border:none; 
 Text-align:center; 
-Min-height:20px; 
-max-height:49px;
-Margin-left:0px; 
+Min-height:40px; 
+max-height:60px;
+Margin-left:1px; 
 Padding-left: 0px;
 }
 QTableView {
@@ -17,7 +17,7 @@ QTableView {
 }
 QTableView QTableCornerButton::section {
     background: #9fa197; 
-    border: 2px outset black;
+    border: 1px outset #9fa197;
 }
 QTableView::indicator:unchecked {
     background-color: #d7d6d5

@@ -3,6 +3,10 @@
 
 #include <QMainWindow>
 #include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QGridLayout>
+#include <QLineEdit>
+#include <QLabel>
 #include <QIcon>
 #include <QTableView>
 #include <QHeaderView>
@@ -15,6 +19,7 @@
 #include <QStatusBar>
 #include <QMenu>
 #include <QAction>
+#include <QModelIndex>
 #include "CAR.h"
 #include "VECTOR.h"
 
@@ -74,6 +79,11 @@ private slots:
     void setFileNameToOpen();
     void setFileNameToSave();
     void loadDataToTable();
+    void saveDataToFile();
+    void saveAsDataToFile();
+    void cellDataChenged(QStandardItem* item);
+    void addNewCar();
+
 
 };
 #endif // MAINWINDOW_H

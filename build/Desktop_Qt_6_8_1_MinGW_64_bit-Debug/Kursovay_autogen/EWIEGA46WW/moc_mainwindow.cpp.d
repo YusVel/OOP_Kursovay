@@ -3,6 +3,7 @@ E:/Qtprojects/Kursovay/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/Kursovay_autoge
   E:/Qt/6.8.1/mingw_64/include/QtCore/QDataStream \
   E:/Qt/6.8.1/mingw_64/include/QtCore/QDir \
   E:/Qt/6.8.1/mingw_64/include/QtCore/QFile \
+  E:/Qt/6.8.1/mingw_64/include/QtCore/QModelIndex \
   E:/Qt/6.8.1/mingw_64/include/QtCore/QString \
   E:/Qt/6.8.1/mingw_64/include/QtCore/QStringList \
   E:/Qt/6.8.1/mingw_64/include/QtCore/QTextStream \
@@ -156,6 +157,8 @@ E:/Qtprojects/Kursovay/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/Kursovay_autoge
   E:/Qt/6.8.1/mingw_64/include/QtGui/qkeysequence.h \
   E:/Qt/6.8.1/mingw_64/include/QtGui/qpaintdevice.h \
   E:/Qt/6.8.1/mingw_64/include/QtGui/qpalette.h \
+  E:/Qt/6.8.1/mingw_64/include/QtGui/qpen.h \
+  E:/Qt/6.8.1/mingw_64/include/QtGui/qpicture.h \
   E:/Qt/6.8.1/mingw_64/include/QtGui/qpixelformat.h \
   E:/Qt/6.8.1/mingw_64/include/QtGui/qpixmap.h \
   E:/Qt/6.8.1/mingw_64/include/QtGui/qpolygon.h \
@@ -163,6 +166,10 @@ E:/Qtprojects/Kursovay/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/Kursovay_autoge
   E:/Qt/6.8.1/mingw_64/include/QtGui/qrgb.h \
   E:/Qt/6.8.1/mingw_64/include/QtGui/qrgba64.h \
   E:/Qt/6.8.1/mingw_64/include/QtGui/qstandarditemmodel.h \
+  E:/Qt/6.8.1/mingw_64/include/QtGui/qtextcursor.h \
+  E:/Qt/6.8.1/mingw_64/include/QtGui/qtextdocument.h \
+  E:/Qt/6.8.1/mingw_64/include/QtGui/qtextformat.h \
+  E:/Qt/6.8.1/mingw_64/include/QtGui/qtextoption.h \
   E:/Qt/6.8.1/mingw_64/include/QtGui/qtgui-config.h \
   E:/Qt/6.8.1/mingw_64/include/QtGui/qtguiexports.h \
   E:/Qt/6.8.1/mingw_64/include/QtGui/qtguiglobal.h \
@@ -172,15 +179,19 @@ E:/Qtprojects/Kursovay/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/Kursovay_autoge
   E:/Qt/6.8.1/mingw_64/include/QtGui/qwindowdefs_win.h \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/QFileDialog \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/QFormLayout \
+  E:/Qt/6.8.1/mingw_64/include/QtWidgets/QGridLayout \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/QHBoxLayout \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/QHeaderView \
+  E:/Qt/6.8.1/mingw_64/include/QtWidgets/QLabel \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/QLayout \
+  E:/Qt/6.8.1/mingw_64/include/QtWidgets/QLineEdit \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/QMainWindow \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/QMenu \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/QMenuBar \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/QStatusBar \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/QTableView \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/QToolBar \
+  E:/Qt/6.8.1/mingw_64/include/QtWidgets/QVBoxLayout \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/QWidget \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/qabstractitemdelegate.h \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/qabstractitemview.h \
@@ -194,8 +205,10 @@ E:/Qtprojects/Kursovay/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/Kursovay_autoge
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/qframe.h \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/qgridlayout.h \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/qheaderview.h \
+  E:/Qt/6.8.1/mingw_64/include/QtWidgets/qlabel.h \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/qlayout.h \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/qlayoutitem.h \
+  E:/Qt/6.8.1/mingw_64/include/QtWidgets/qlineedit.h \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/qmainwindow.h \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/qmenu.h \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/qmenubar.h \
