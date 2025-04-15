@@ -25,7 +25,8 @@ class CAR
 {
 private:
     ushort *spec;
-    QStringList *picturesPath;
+public:
+    QStringList picturesPath;
 public:
     static unsigned int carsQuantity;
     static QStringList listModels;
@@ -43,6 +44,7 @@ public:
     void setAcceleration(ushort acceleration);
     void setFuelRate(ushort fuelRate);
     void setClearence(ushort clearence);
+    void setPicturesPaths(QStringList& path);
 
     QString getBrandStr();
     QString getYearOfManufactureStr();
@@ -89,7 +91,7 @@ public:
         {
             stream<<item.spec[i];
         }
-        stream<<*(item.picturesPath);
+        stream<<(item.picturesPath);
         return stream;
     }
 
@@ -99,7 +101,7 @@ public:
         {
             stream>>item.spec[i];
         }
-        stream>>*(item.picturesPath);
+        stream>>(item.picturesPath);
         return stream;
     }
 };

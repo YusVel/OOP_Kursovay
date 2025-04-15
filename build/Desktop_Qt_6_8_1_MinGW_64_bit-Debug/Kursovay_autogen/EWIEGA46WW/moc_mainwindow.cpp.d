@@ -177,6 +177,7 @@ E:/Qtprojects/Kursovay/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/Kursovay_autoge
   E:/Qt/6.8.1/mingw_64/include/QtGui/qvalidator.h \
   E:/Qt/6.8.1/mingw_64/include/QtGui/qwindowdefs.h \
   E:/Qt/6.8.1/mingw_64/include/QtGui/qwindowdefs_win.h \
+  E:/Qt/6.8.1/mingw_64/include/QtWidgets/QCompleter \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/QFileDialog \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/QFormLayout \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/QGridLayout \
@@ -188,17 +189,21 @@ E:/Qtprojects/Kursovay/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/Kursovay_autoge
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/QMainWindow \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/QMenu \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/QMenuBar \
+  E:/Qt/6.8.1/mingw_64/include/QtWidgets/QPushButton \
+  E:/Qt/6.8.1/mingw_64/include/QtWidgets/QSpinBox \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/QStatusBar \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/QTableView \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/QToolBar \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/QVBoxLayout \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/QWidget \
+  E:/Qt/6.8.1/mingw_64/include/QtWidgets/qabstractbutton.h \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/qabstractitemdelegate.h \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/qabstractitemview.h \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/qabstractscrollarea.h \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/qabstractslider.h \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/qabstractspinbox.h \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/qboxlayout.h \
+  E:/Qt/6.8.1/mingw_64/include/QtWidgets/qcompleter.h \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/qdialog.h \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/qfiledialog.h \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/qformlayout.h \
@@ -212,9 +217,11 @@ E:/Qtprojects/Kursovay/build/Desktop_Qt_6_8_1_MinGW_64_bit-Debug/Kursovay_autoge
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/qmainwindow.h \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/qmenu.h \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/qmenubar.h \
+  E:/Qt/6.8.1/mingw_64/include/QtWidgets/qpushbutton.h \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/qrubberband.h \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/qsizepolicy.h \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/qslider.h \
+  E:/Qt/6.8.1/mingw_64/include/QtWidgets/qspinbox.h \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/qstatusbar.h \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/qstyle.h \
   E:/Qt/6.8.1/mingw_64/include/QtWidgets/qstyleoption.h \

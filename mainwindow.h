@@ -5,7 +5,10 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QGridLayout>
+#include <QPushButton>
 #include <QLineEdit>
+#include <QCompleter>
+#include <QSpinBox>
 #include <QLabel>
 #include <QIcon>
 #include <QTableView>
@@ -58,13 +61,18 @@ class MainWindow : public QMainWindow
     QAction *exit;
 
     QString *pathFile;
+    QStringList *pathFoto;
+
+    QWidget *addCAR;
 
     VECTOR<CAR> DATA;
+    //CAR *newCAR;
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
     void loadData();
+signals:
 private:
    // void closeEvent(QCloseEvent *event) override;
     void setMainMenuBar();
@@ -75,7 +83,9 @@ private:
     void setToolBar();
     void setStatusBar();
     void loadStyleSheet();
+    void setFotoPathFilesToCar(CAR&car);
 private slots:
+    void setFileNameFoto();
     void setFileNameToOpen();
     void setFileNameToSave();
     void loadDataToTable();
@@ -83,6 +93,7 @@ private slots:
     void saveAsDataToFile();
     void cellDataChenged(QStandardItem* item);
     void addNewCar();
+    void createNewCar();
 
 
 };

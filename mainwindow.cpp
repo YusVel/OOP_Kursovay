@@ -5,6 +5,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
 {
 
     pathFile = new QString;
+    pathFoto = new QStringList;
     loadStyleSheet();
     setTableView();
     setMainMenuBar();
@@ -121,6 +122,17 @@ void MainWindow::loadStyleSheet()
     file.close();
 }
 
+void MainWindow::setFotoPathFilesToCar(CAR &car)
+{
+    car.picturesPath = QFileDialog::getOpenFileNames(this);
+}
+
+void MainWindow::setFileNameFoto()
+{
+    *pathFoto = QFileDialog::getOpenFileNames(this,"Укажите путь к ФОТО");
+    qDebug()<<*pathFoto;
+}
+
 void MainWindow::setFileNameToOpen()
 {
     *pathFile = QFileDialog::getOpenFileName(this,"Открыть","*.base");
@@ -228,43 +240,89 @@ void MainWindow::cellDataChenged(QStandardItem *item)
 
 void MainWindow::addNewCar()//*************************
 {
-    QWidget *addCAR = new QWidget(this,Qt::Window);
+    addCAR = new QWidget(this,Qt::Window);
     addCAR->setWindowTitle("Добавить новое ТС");
     addCAR->setAttribute(Qt::WA_DeleteOnClose,true);
     addCAR->setWindowModality(Qt::WindowModal);
-    addCAR->resize(400,500);
+    addCAR->setFixedSize(400,350);
+
+
+    QCompleter *completer = new QCompleter(CAR::listModels,addCAR);
+    completer->setCaseSensitivity(Qt::CaseInsensitive);
+
+    QVBoxLayout  *v_box = new QVBoxLayout(addCAR);
+    QVBoxLayout  *h_box = new QVBoxLayout(addCAR);
     QGridLayout *grid_layout = new QGridLayout(addCAR);
-    QLabel *brand_label = new QLabel("Марка и модель: ");
-    QLabel year_label("Год выпуска: ");
-    QLabel price_label("Цена: ");
-    QLabel engine_label("Объем двигателя: ");
-    QLabel power_label("Мощность: ");
-    QLabel maxSpeed_label("Максимальная скорость: ");
-    QLabel acceleration_label("Ускарение: ");
-    QLabel fuelRate_label("Марка и модель: ");
-    QLabel clearence_label("Марка и модель: ");
-    QLineEdit brand_line;
-    QLineEdit year_line;
-    year_line.setPlaceholderText("год от рождества");
-    QLineEdit price_line;
-    price_line.setPlaceholderText("х1000 рублей");
-    QLineEdit engineCapaciteline;
-    engineCapaciteline.setPlaceholderText("в куб. сантиметрах");
-    QLineEdit power_line;
-    power_line.setPlaceholderText("в лошадиных силах");
-    QLineEdit maxSpeed_line;
-    maxSpeed_line.setPlaceholderText(" в км/ч");
-    QLineEdit acceleration_line;
-    acceleration_line.setPlaceholderText("в милисекундах");
-    QLineEdit fuelRate_line;
-    fuelRate_line.setPlaceholderText("в милилитрах");
-    QLineEdit clearence_line;
-    clearence_line.setPlaceholderText("в милиметрах");
 
+    QLabel *brand_label = new QLabel("Марка и модель: ",addCAR);
+    QLabel *year_label = new QLabel("Год выпуска: ",addCAR);
+    QLabel *price_label = new QLabel("Цена (тыс. руб): ",addCAR);
+    QLabel *engine_label = new QLabel("Объем двигателя (см. куб): ",addCAR);
+    QLabel *power_label = new QLabel("Мощность (л.с.): ",addCAR);
+    QLabel *maxSpeed_label = new QLabel("Максимальная скорость (км/ч): ",addCAR);
+    QLabel *acceleration_label = new QLabel("Ускарение (100 км/ч за мс): ",addCAR);
+    QLabel *fuelRate_label = new QLabel("Расход топлива (мл): ",addCAR);
+    QLabel *clearence_label = new QLabel("Дорожный просвет (мм): ",addCAR);
+    QLabel *fotoPath_label = new QLabel("Путь к файлам с ФОТО: ",addCAR);
 
-    grid_layout->addWidget(brand_label,0,0,30,Qt::AlignRight);
-    addCAR->setLayout(grid_layout);
+    QLineEdit *brand_line = new QLineEdit(addCAR);
+    brand_line->setCompleter(completer);
+    brand_line->setPlaceholderText("на англ.");
+    QSpinBox *year_line = new QSpinBox(addCAR);
+    year_line->setRange(1995,2025);
+    QSpinBox *price_line = new QSpinBox(addCAR);
+    price_line->setRange(200,65000);
+    QSpinBox *engineCapaciteline = new QSpinBox(addCAR);
+    engineCapaciteline->setRange(1200,5000);
+    QSpinBox *power_line = new QSpinBox(addCAR);
+    power_line->setRange(80,450);
+    QSpinBox *maxSpeed_line = new QSpinBox(addCAR);
+    maxSpeed_line->setRange(0,500);
+    QSpinBox *acceleration_line = new QSpinBox(addCAR);
+    acceleration_line->setRange(1000,10000);
+    QSpinBox *fuelRate_line = new QSpinBox(addCAR);
+    fuelRate_line->setRange(0,65000);
+    QSpinBox *clearence_line = new QSpinBox(addCAR);
+    clearence_line->setRange(30,1000);
+
+    QPushButton *addFoto = new QPushButton("Добавить ФОТО");
+    QObject::connect(addFoto,&QPushButton::clicked,this,&MainWindow::setFileNameFoto);
+
+    QPushButton *createCar = new QPushButton("Создать");
+    h_box->addWidget(createCar,Qt::AlignRight);
+
+    grid_layout->addWidget(brand_label,0,0);
+    grid_layout->addWidget(brand_line,0,1);
+    grid_layout->addWidget(year_label,1,0);
+    grid_layout->addWidget(year_line,1,1);
+    grid_layout->addWidget(price_label,2,0);
+    grid_layout->addWidget(price_line,2,1);
+    grid_layout->addWidget(engine_label,3,0);
+    grid_layout->addWidget(engineCapaciteline,3,1);
+    grid_layout->addWidget(power_label,4,0);
+    grid_layout->addWidget(power_line,4,1);
+    grid_layout->addWidget(maxSpeed_label,5,0);
+    grid_layout->addWidget(maxSpeed_line,5,1);
+    grid_layout->addWidget(acceleration_label,6,0);
+    grid_layout->addWidget(acceleration_line,6,1);
+    grid_layout->addWidget(fuelRate_label,7,0);
+    grid_layout->addWidget(fuelRate_line,7,1);
+    grid_layout->addWidget(clearence_label,8,0);
+    grid_layout->addWidget(clearence_line,8,1);
+    grid_layout->addWidget(fotoPath_label,9,0);
+    grid_layout->addWidget(addFoto,9,1);
+    grid_layout->setHorizontalSpacing(30);
+    v_box->addLayout(grid_layout);
+    v_box->addLayout(h_box);
+
+    addCAR->setLayout(v_box);
     addCAR->show();
+
+}
+
+void MainWindow::createNewCar()
+{
+
 }
 
 

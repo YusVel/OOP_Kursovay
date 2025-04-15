@@ -5,7 +5,6 @@ QStringList CAR:: listModels;
 
 CAR::CAR() {
     this->spec = new ushort[MAX_SPEC]{0};
-    this->picturesPath = new QStringList;
     if(carsQuantity==0)
     {
         QFile file("listOfBrands.txt");
@@ -32,7 +31,7 @@ CAR::CAR(CAR &other)
     {
         this->spec[i] = other.spec[i];
     }
-    *this->picturesPath = *other.picturesPath;
+    this->picturesPath = other.picturesPath;
     carsQuantity++;
 }
 
@@ -42,14 +41,13 @@ CAR &CAR::operator=( const CAR &other)
     {
         this->spec[i] = other.spec[i];
     }
-    *this->picturesPath = *other.picturesPath;
+    this->picturesPath = other.picturesPath;
     return *this;
 }
 
 CAR::~CAR()
 {
     delete []spec;
-    delete picturesPath;
     --carsQuantity;
     if(carsQuantity==0)
     {
@@ -102,6 +100,11 @@ void CAR::setFuelRate(ushort fuelRate){
 
 void CAR::setClearence(ushort clearence){
     this->spec[CLEARENCE] = clearence;
+}
+
+void CAR::setPicturesPaths(QStringList &path)
+{
+    this->picturesPath = path;
 }
 
 
