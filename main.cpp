@@ -8,7 +8,8 @@ int main(int argc, char *argv[])
 
     try
     {
-
+        MainWindow w;
+         w.show();
     }
     catch (const char * error)
     {

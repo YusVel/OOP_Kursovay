@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
     this->resize(600,700);
     this->setFixedWidth(1050);
 
-    icon = new QIcon("mainWindowIco.ico");
+    icon = new QIcon(QDir::current().absolutePath()+QString("/source/mainWindowIco.ico"));
     this->setWindowIcon(*icon);
 
 }
@@ -82,21 +82,21 @@ void MainWindow::setToolBar()
 {
     toolBar = new QToolBar();
     toolBar->setMovable(false);
-    openFileTool = toolBar->addAction(QIcon("openFileIco.ico"),"",QKeySequence("Ctrl+O"));
+    openFileTool = toolBar->addAction(QIcon(QDir::current().absolutePath()+QString("/source/openFileIco.ico")),"",QKeySequence("Ctrl+O"));
     openFileTool->setToolTip("Открыть");
-    saveFileTool = toolBar->addAction(QIcon("saveIco.ico"),"",QKeySequence("Ctrl+S"));
+    saveFileTool = toolBar->addAction(QIcon(QDir::current().absolutePath()+QString("/source/saveIco.ico")),"",QKeySequence("Ctrl+S"));
     saveFileTool->setToolTip("Сохранить");
-    saveAsFileTool = toolBar->addAction(QIcon("saveAsIco.ico"),"");
+    saveAsFileTool = toolBar->addAction(QIcon(QDir::current().absolutePath()+QString("/source/saveAsIco.ico")),"");
     saveAsFileTool->setToolTip("Сохранить как");
-    addTableTool  = toolBar->addAction(QIcon("addTableIco.ico"),"");
+    addTableTool  = toolBar->addAction(QIcon(QDir::current().absolutePath()+QString("/source/addTableIco.ico")),"");
     addTableTool->setToolTip("Создать новую таблицу");
-    addCarTool = toolBar->addAction(QIcon("addCarIco.ico"),"");
+    addCarTool = toolBar->addAction(QIcon(QDir::current().absolutePath()+QString("/source/addCarIco.ico")),"");
     addCarTool->setToolTip("Добавить новое ТС");
-    deleteCarTool = toolBar->addAction(QIcon("deleteCarIco.ico"),"");
+    deleteCarTool = toolBar->addAction(QIcon(QDir::current().absolutePath()+QString("/source/deleteCarIco.ico")),"");
     deleteCarTool->setToolTip("Удалить");
-    printTool = toolBar->addAction(QIcon("printIco.ico"),"",QKeySequence("Ctrl+P"));
+    printTool = toolBar->addAction(QIcon(QDir::current().absolutePath()+QString("/source/printIco.ico")),"",QKeySequence("Ctrl+P"));
     printTool->setToolTip("Печать");
-    helpTool = toolBar->addAction(QIcon("helpIco.ico"),"");
+    helpTool = toolBar->addAction(QIcon(QDir::current().absolutePath()+QString("/source/helpIco.ico")),"");
     helpTool->setToolTip("Справка");
 
     QObject::connect(openFileTool,SIGNAL(triggered()),this,SLOT(setFileNameToOpen()));
@@ -115,7 +115,7 @@ void MainWindow::setStatusBar()
 
 void MainWindow::loadStyleSheet()
 {
-    QFile file("styleSheet.txt");
+    QFile file(QDir::current().absolutePath()+QString("/source/styleSheet.txt"));
     file.open(QIODeviceBase::ReadOnly);
     styleSheet = new QString;
     *styleSheet = QLatin1String(file.readAll());
@@ -136,11 +136,15 @@ void MainWindow::setFileNameFoto()
 void MainWindow::setFileNameToOpen()
 {
     *pathFile = QFileDialog::getOpenFileName(this,"Открыть","*.base");
-    loadDataToTable();
+    if(*pathFile!="")
+    {
+        loadDataToTable();
+    }
 }
 
 void MainWindow::setFileNameToSave()
 {
+
     *pathFile = QFileDialog::getSaveFileName(this,"Сохранить как",QDir::currentPath(),"База данных(*.base)");
 
     qDebug()<<*pathFile;
@@ -149,6 +153,7 @@ void MainWindow::setFileNameToSave()
 void MainWindow::loadDataToTable()
 {
     DATA.readFromFile(*pathFile);
+
     qDebug()<<"Загружено: "<<DATA.getSize()<<"авто.";
     this->setWindowTitle(QString("Курсовая работа по ООП (class CAR) %1").arg(*pathFile));
     if(model==NULL)

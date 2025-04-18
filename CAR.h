@@ -7,6 +7,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QDataStream>
+#include <QDir>
 #define MAX_SPEC 9
 enum SPECIFICATIONS
 {

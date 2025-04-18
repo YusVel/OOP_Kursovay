@@ -7,7 +7,8 @@ CAR::CAR() {
     this->spec = new ushort[MAX_SPEC]{0};
     if(carsQuantity==0)
     {
-        QFile file("listOfBrands.txt");
+        QFile file(QDir::current().absolutePath()+QString("/source/listOfBrands.txt"));
+        qDebug()<<QDir::current().absolutePath()+QString("/listOfBrands.txt");
         if(!file.open(QIODevice::ReadOnly|QIODevice::Text))
         {
             qDebug()<<"Ошибка в загрузке названия бренда автомиобиля!";
@@ -51,7 +52,7 @@ CAR::~CAR()
     --carsQuantity;
     if(carsQuantity==0)
     {
-        QFile file("listOfBrands.txt");
+        QFile file(QDir::current().absolutePath()+QString("/source/listOfBrands.txt"));
         if(!file.open(QIODevice::WriteOnly|QIODevice::Text))
         {
             qDebug()<<"Ошибка при сохранении файла listOfBrands.txt!";

@@ -388,6 +388,7 @@ template<typename T>
 inline void VECTOR<T>::readFromFile(QString pathToFile)
 {
     QFile file(pathToFile);
+
     if(!file.open(QIODeviceBase::ReadOnly))
     {
         throw "ERROR! VECTOR<T>::writeToFile(const QString &pathToFile)// Can not open path to file";
@@ -400,6 +401,7 @@ inline void VECTOR<T>::readFromFile(QString pathToFile)
         this->push_back(temp);
     }
     file.close();
+
 }
 
 template<typename T>
