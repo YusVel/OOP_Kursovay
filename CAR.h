@@ -25,6 +25,7 @@ enum SPECIFICATIONS
 class CAR
 {
 private:
+
     ushort *spec;
 public:
     QStringList picturesPath;
@@ -105,6 +106,20 @@ public:
         stream>>(item.picturesPath);
         return stream;
     }
+
+    QString prepareToPrint()
+    {
+        return QString("Марка/Модель: "+this->getBrandStr()+"\n"
+               +"\tЦена: "+this->getPriceStr()+" тыс. рублей\n"
+               +"\tГод выпуска: "+this->getYearOfManufactureStr()+" г.\n"
+               +"\tОбъём двигателя: "+this->getEngineCapacityStr()+" см. куб\n"
+               +"\tМощность: "+this->getPowerStr()+" л.с\n"
+               +"\tМасимальная скорость: "+this->getMaxSpeedStr()+" км/ч\n"
+               +"\tУскорение: 100 км/ч за "+this->getAccelerationStr()+" мс\n"
+               +"\tРасход товлива на 100 км: "+this->getFuelRateStr()+" мл\n"
+               +"\tДорожный просвет: "+this->getClearenceStr()+" мм\n");
+    }
+
 };
 
 #endif // CAR_H

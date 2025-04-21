@@ -12,22 +12,35 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
     setToolBar();
     setStatusBar();
 
-    hlayout = new QHBoxLayout();
-    hlayout->addWidget(tableData);
-    hlayout->setAlignment(Qt::AlignBottom);
-    hlayout->setGeometry(QRect(10,55,1030,300));
+    lableFoto = new QLabel(this);
+    lableFoto->setText("FOTO");
+    lableFoto->setGeometry(QRect(260,360,540,335));
+    lableFoto->setScaledContents(true);
+
+
+    vlayout = new QVBoxLayout;
+    vlayout->addWidget(tableData);
+    vlayout->setAlignment(Qt::AlignCenter);
+    vlayout->setGeometry(QRect(10,55,1030,300));
+    vlayout->addWidget(lableFoto);
 
     this->setAttribute(Qt::WA_DeleteOnClose,true);
     this->setWindowTitle("Курсовая работа по ООП (class CAR)");
     this->resize(600,700);
-    this->setFixedWidth(1050);
+    this->setFixedSize(1050,700);
+
+    QObject::connect(this,SIGNAL(appearNewCar()),SLOT(addNewCarToModel()));
+    QObject::connect(tableData,SIGNAL(clicked(QModelIndex)),this,SLOT(showFotoOfCar(QModelIndex)));
+
 
     icon = new QIcon(QDir::current().absolutePath()+QString("/source/mainWindowIco.ico"));
     this->setWindowIcon(*icon);
 
 }
 
-MainWindow::~MainWindow() {}
+MainWindow::~MainWindow() {
+
+}
 
 void MainWindow::loadData()
 {
@@ -45,7 +58,7 @@ void MainWindow::setMainMenuBar()
 
 void MainWindow::setFileMenu()
 {
-    fileMenu = new QMenu(tr("Файл"),mainMenuBar);
+    fileMenu = new QMenu(tr("Файл"),this);
     openFile =  fileMenu->addAction(tr("Открыть"));
     saveFile = fileMenu->addAction(tr("Сохранить"));
     saveAsFile = fileMenu->addAction(tr("Сохранить как"));
@@ -60,14 +73,14 @@ void MainWindow::setFileMenu()
 
 void MainWindow::setSettingMenu()
 {
-    settingMenu = new QMenu(tr("Настройки"),mainMenuBar);
+    settingMenu = new QMenu(tr("Настройки"),this);
 
     mainMenuBar->addMenu(settingMenu);
 }
 
 void MainWindow::setHelpMenu()
 {
-    helpMenu = new QMenu(tr("Справка"),mainMenuBar);
+    helpMenu = new QMenu(tr("Справка"),this);
 
     mainMenuBar->addMenu(helpMenu);
 }
@@ -80,7 +93,7 @@ void MainWindow::setTableView()
 
 void MainWindow::setToolBar()
 {
-    toolBar = new QToolBar();
+    toolBar = new QToolBar(this);
     toolBar->setMovable(false);
     openFileTool = toolBar->addAction(QIcon(QDir::current().absolutePath()+QString("/source/openFileIco.ico")),"",QKeySequence("Ctrl+O"));
     openFileTool->setToolTip("Открыть");
@@ -103,13 +116,17 @@ void MainWindow::setToolBar()
     QObject::connect(saveFileTool,SIGNAL(triggered()),this,SLOT(saveDataToFile()));
     QObject::connect(saveAsFileTool,SIGNAL(triggered()),this,SLOT(saveAsDataToFile()));
     QObject::connect(addCarTool,SIGNAL(triggered()),this,SLOT(addNewCar()));
+    QObject::connect(deleteCarTool,SIGNAL(triggered()),this,SLOT(deleteCarFromTable()));
+    QObject::connect(addTableTool,SIGNAL(triggered()),this,SLOT(createNewTable()));
+    QObject::connect(helpTool,SIGNAL(triggered()),this,SLOT(showInfo()));
+    QObject::connect(printTool,SIGNAL(triggered()),this, SLOT(printTable()));
 
     this->addToolBar(Qt::TopToolBarArea,toolBar);
 }
 
 void MainWindow::setStatusBar()
 {
-    statusBar = new QStatusBar();
+    statusBar = new QStatusBar(this);
     this->QMainWindow::setStatusBar(statusBar);
 }
 
@@ -153,7 +170,6 @@ void MainWindow::setFileNameToSave()
 void MainWindow::loadDataToTable()
 {
     DATA.readFromFile(*pathFile);
-
     qDebug()<<"Загружено: "<<DATA.getSize()<<"авто.";
     this->setWindowTitle(QString("Курсовая работа по ООП (class CAR) %1").arg(*pathFile));
     if(model==NULL)
@@ -162,7 +178,7 @@ void MainWindow::loadDataToTable()
     }
     else
     {
-        delete model;
+        model->clear();
         model = new QStandardItemModel(DATA.getSize(),10);
     }
 
@@ -213,16 +229,27 @@ void MainWindow::loadDataToTable()
 
 void MainWindow::saveDataToFile()
 {
-    DATA.writeToFile(*pathFile);
-    qDebug()<<"Сохранено: "<<DATA.getSize()<<"авто."<<*pathFile;
+    if(*pathFile!="")
+    {
+        DATA.writeToFile(*pathFile);
+        qDebug()<<"Сохранено: "<<DATA.getSize()<<"авто."<<*pathFile;
+    }
+    else { qDebug()<<"Отсутствует путь для сохранения файла";}
+    modalChanged = false;
 }
 
 void MainWindow::saveAsDataToFile()
 {
     setFileNameToSave();
-    DATA.writeToFile(*pathFile);
-    qDebug()<<"Сохранено: "<<DATA.getSize()<<"авто."<<*pathFile;
-    this->setWindowTitle(QString("Курсовая работа по ООП (class CAR) %1").arg(*pathFile));
+    if(*pathFile!="")
+    {
+         DATA.writeToFile(*pathFile);
+        qDebug()<<"Сохранено: "<<DATA.getSize()<<"авто."<<*pathFile;
+        this->setWindowTitle(QString("Курсовая работа по ООП (class CAR) %1").arg(*pathFile));
+    }
+     else { qDebug()<<"Отсутствует путь для сохранения файла";}
+
+    modalChanged = false;
 }
 
 void MainWindow::cellDataChenged(QStandardItem *item)
@@ -230,7 +257,15 @@ void MainWindow::cellDataChenged(QStandardItem *item)
     qDebug()<<"row = "<<item->row()<<"  column = "<<item->column();
     switch(item->column())
     {
-    case 0: DATA[item->row()].setBrand((item->data(2)).toInt()); break;
+    case 0: if(CAR::listModels.contains(item->data(0))){
+                DATA[item->row()].setBrand(CAR::listModels.indexOf(item->data(0)));
+            }
+            else {
+            qDebug()<<item->data(0).toString();
+                CAR::listModels.append(item->data(0).toString());
+                DATA[item->row()].setBrand(CAR::listModels.size()-1);
+            }
+        break;
     case 1: DATA[item->row()].setYearOfManufacture((item->data(2)).toInt()); break;
     case 2: DATA[item->row()].setPrice((item->data(2)).toInt()); break;
     case 3: DATA[item->row()].setEngineCapacity((item->data(2)).toInt()); break;
@@ -241,6 +276,7 @@ void MainWindow::cellDataChenged(QStandardItem *item)
     case 8: DATA[item->row()].setClearence((item->data(2)).toInt()); break;
     default : break;
     }
+    modalChanged = true;
 }
 
 void MainWindow::addNewCar()//*************************
@@ -250,6 +286,7 @@ void MainWindow::addNewCar()//*************************
     addCAR->setAttribute(Qt::WA_DeleteOnClose,true);
     addCAR->setWindowModality(Qt::WindowModal);
     addCAR->setFixedSize(400,350);
+
 
 
     QCompleter *completer = new QCompleter(CAR::listModels,addCAR);
@@ -275,18 +312,25 @@ void MainWindow::addNewCar()//*************************
     brand_line->setPlaceholderText("на англ.");
     QSpinBox *year_line = new QSpinBox(addCAR);
     year_line->setRange(1995,2025);
+
     QSpinBox *price_line = new QSpinBox(addCAR);
     price_line->setRange(200,65000);
+
     QSpinBox *engineCapaciteline = new QSpinBox(addCAR);
     engineCapaciteline->setRange(1200,5000);
+
     QSpinBox *power_line = new QSpinBox(addCAR);
     power_line->setRange(80,450);
+
     QSpinBox *maxSpeed_line = new QSpinBox(addCAR);
     maxSpeed_line->setRange(0,500);
+
     QSpinBox *acceleration_line = new QSpinBox(addCAR);
     acceleration_line->setRange(1000,10000);
+
     QSpinBox *fuelRate_line = new QSpinBox(addCAR);
     fuelRate_line->setRange(0,65000);
+
     QSpinBox *clearence_line = new QSpinBox(addCAR);
     clearence_line->setRange(30,1000);
 
@@ -295,6 +339,37 @@ void MainWindow::addNewCar()//*************************
 
     QPushButton *createCar = new QPushButton("Создать");
     h_box->addWidget(createCar,Qt::AlignRight);
+
+    QObject::connect(createCar,&QPushButton::clicked,[&,this,brand_line,year_line,price_line,engineCapaciteline,power_line,maxSpeed_line,acceleration_line,fuelRate_line,clearence_line](){
+        CAR car;
+        brand_line->text();
+        if(CAR::listModels.contains(brand_line->text()))
+        {
+            car.setBrand(static_cast<ushort>(CAR::listModels.indexOf(brand_line->text())));
+        }
+        else
+        {
+            CAR::listModels.append(brand_line->text());
+            car.setBrand(CAR::listModels.size()-1);
+            qDebug()<<"добавлено новая марка ТС!";
+        }
+        car.setYearOfManufacture(static_cast<ushort>(year_line->value()));
+        car.setPrice(static_cast<ushort>(price_line->value()));
+        car.setEngineCapacity(static_cast<ushort>(engineCapaciteline->value()));
+        car.setPower(static_cast<ushort>(power_line->value()));
+        car.setMaxSpeed(static_cast<ushort>(maxSpeed_line->value()));
+        car.setAcceleration(static_cast<ushort>(acceleration_line->value()));
+        car.setFuelRate(static_cast<ushort>(fuelRate_line->value()));
+        car.setClearence(static_cast<ushort>(clearence_line->value()));
+        car.picturesPath = *pathFoto;
+        pathFoto->clear();
+        qDebug()<<"Создана машина!"<<car;
+        this->DATA.push_back(car);
+        emit this->appearNewCar();
+        /*
+
+        */
+    });
 
     grid_layout->addWidget(brand_label,0,0);
     grid_layout->addWidget(brand_line,0,1);
@@ -325,16 +400,181 @@ void MainWindow::addNewCar()//*************************
 
 }
 
-void MainWindow::createNewCar()
+void MainWindow::addNewCarToModel()
 {
+    if(model!=NULL){this->model->clear();}
+
+    qDebug()<<"Загружено: "<<DATA.getSize()<<"авто.";
+    if(model==NULL)
+    {
+        model = new QStandardItemModel(DATA.getSize(),10);
+    }
+    else
+    {
+        model->clear();
+        model = new QStandardItemModel(DATA.getSize(),10);
+    }
+
+    model->setHeaderData(0,Qt::Horizontal,"МАРКА/МОДЕЛЬ");
+    model->setHeaderData(1,Qt::Horizontal,"   Год   ");
+    model->setHeaderData(2,Qt::Horizontal,"ЦЕНА, руб");
+    model->setHeaderData(3,Qt::Horizontal,"ОБЪЕМ ДВ.,\nсм. куб.");
+    model->setHeaderData(4,Qt::Horizontal,"МОЩНОСТЬ ДВ.\n л.с.");
+    model->setHeaderData(5,Qt::Horizontal,"МАКС. СКОРОСТЬ,\nкм/ч");
+    model->setHeaderData(6,Qt::Horizontal,"УСКОРЕНИЕ,\n100 км/ч за n cек.");
+    model->setHeaderData(7,Qt::Horizontal,"РАСХОД ТОПЛИВА,\nлит. на 100 км");
+    model->setHeaderData(8,Qt::Horizontal,"КЛИРЕНС,\nмм");
+    model->setHeaderData(9,Qt::Horizontal,"ФОТО");
+
+
+    for(int row = 0;row<DATA.getSize();row++)
+    {
+        for(int col = 0;col<MAX_SPEC;col++)
+        {
+            model->setItem(row,col,new QStandardItem(DATA[row].getSpecsStr(col)));
+            if(col!=0)
+            {
+                model->item(row,col)->setTextAlignment(Qt::AlignCenter);
+                model->item(row,col)->setData(QVariant(DATA[row].getSpecs(SPECIFICATIONS(col))),2);
+            }
+        }
+    }
+
+    tableData->setModel(model);
+    tableData->showGrid();
+    tableData->setSelectionMode(QAbstractItemView::SingleSelection);
+    tableData->setWordWrap(true);
+
+    QHeaderView *horizontalHeader = tableData->horizontalHeader();
+    QHeaderView *verticallHeader = tableData->verticalHeader();
+
+    if(true) //
+    {
+        horizontalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
+        verticallHeader->setSectionResizeMode(QHeaderView::Interactive);
+        horizontalHeader->setStretchLastSection(true);
+        horizontalHeader->setStyleSheet(*styleSheet);
+        verticallHeader->setStyleSheet(*styleSheet);
+    }
+    modalChanged = true;
+    QObject::connect(model,SIGNAL(itemChanged(QStandardItem*)),this,SLOT(cellDataChenged(QStandardItem*)));
 
 }
 
+void MainWindow::deleteCarFromTable()
+{
+    modalChanged = true;
+    QItemSelectionModel *selectionModel = tableData->selectionModel();
+    if(selectionModel!=NULL)
+    {
+        QModelIndex index = selectionModel->currentIndex();
+        qDebug()<<"Удаляемая строка "<<index.row();
+        if(index.row()>=0)
+        {
+            this->DATA.erase(index.row());
+            this->addNewCarToModel();
+        }
+    }
+}
 
-/*
+void MainWindow::createNewTable()
+{
+    this->DATA.clear();
+    this->addNewCarToModel();
+    modalChanged = true;
+}
+
+void MainWindow::showInfo()
+{
+    QMessageBox *message = new QMessageBox(QMessageBox::Information,"Общая информация","Велиметов Юсуп Касумович\nПИБ 32з\n2-курс\nPER ASPERA AD ASTRA!",QMessageBox::Ok,this);
+    message->show();
+}
+
+void MainWindow::printTable()
+{
+    QPrinter printer;
+    printer.setPrinterName("You printer");
+    QPrintDialog dialog(&printer,this);
+    if(dialog.exec()==QDialog::Rejected){return;}
+    //tableData->render(&printer);
+    QTextDocument doc(this);
+    doc.setPlainText(DATA[0].prepareToPrint());
+    doc.print(&printer);
+}
+
+void MainWindow::showFotoOfCar(const QModelIndex &index)
+{
+    QString pathf;
+    int indexCar = index.row();
+    int sizeListFotos = DATA[indexCar].picturesPath.size();
+    if(sizeListFotos==0){
+        pathf = "E:\\Qtprojects\\Kursovay\\Foto\\NoFoto.jpg";
+        QPixmap pixMap(pathf);
+        lableFoto->setPixmap(pixMap);
+    }
+    else {
+        pathf = DATA[indexCar].picturesPath[0];
+        pathf.replace("/","\\");
+        QPixmap pixMap(pathf);
+        lableFoto->setPixmap(pixMap);
+    }
+}
+
+
+
 void MainWindow::closeEvent(QCloseEvent *event)
 {
+
     qDebug()<<"close()";
+    if(modalChanged)
+    {
+        QMessageBox::StandardButton massage;
+        massage = QMessageBox::question(this,"Выход:"
+                                        ,"Сохранить данные? "
+                                        ,QMessageBox::Yes|QMessageBox::No,QMessageBox::No);
+
+        if(massage==QMessageBox::Yes)
+        {
+            if(*pathFile == "")
+            {
+                saveAsFileTool->triggered();
+            }
+            else
+            {
+                saveFileTool->triggered();
+            }
+
+        }
+    }
+
+}
+
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
+    if(event->key()==Qt::Key_Delete)
+    {
+        this->deleteCarTool->trigger();
+    }
+}
+/*
+void MainWindow::paintEvent(QPaintEvent *event)
+{
+
+
+    //lableFoto->setText("E:\\Qtprojects\\Kursovay\\Foto\\BattleHorse.jpg");
+    lableFoto->setPixmap(QPixmap("E:\\Qtprojects\\Kursovay\\Foto\\BattleHorse.jpg"));
+    lableFoto->setGeometry(QRect(400,355,1030,300));
+
+    QString pathFoto = "E:\\Qtprojects\\Kursovay\\Foto\\BattleHorse.jpg"; //QFileDialog::getOpenFileName(this,"Укажите путь к ФОТО","*.jpg");
+    pathFoto.replace("/","\\");
+    qDebug()<<pathFoto;
+    QImage image(pathFoto);
+    if(image.isNull()){qDebug()<<"pathFoto - failed";}
+    QPainter *painter = new QPainter(this);
+
+    painter->begin(this);
+    painter->drawImage(this->x()-500,this->y()+178,image);
+    painter->end();
 
 }
 */

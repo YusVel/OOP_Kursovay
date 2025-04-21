@@ -47,6 +47,7 @@ public:
     VECTOR(VECTOR &other);
     ~VECTOR();
     unsigned long getSize();
+    void clear();
     unsigned long getCapacity();
     void push_back(const T &item);
     void pop_back();
@@ -118,6 +119,12 @@ VECTOR<T>::~VECTOR()
 template<typename T>
 inline unsigned long VECTOR<T>::getSize(){
     return this->size;
+}
+
+template<typename T>
+inline void VECTOR<T>::clear()
+{
+    this->size = 0;
 }
 
 template<typename T>
@@ -395,6 +402,7 @@ inline void VECTOR<T>::readFromFile(QString pathToFile)
     }
     QDataStream in(&file);
     CAR temp;
+    this->size = 0;
     while(!in.atEnd())
     {
         in>>temp;

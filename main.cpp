@@ -8,13 +8,12 @@ int main(int argc, char *argv[])
 
     try
     {
-        MainWindow w;
-         w.show();
+        w.show();
     }
     catch (const char * error)
     {
         qDebug()<<error;
     }
-    w.show();
+
     return a.exec();
 }

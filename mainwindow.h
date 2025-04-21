@@ -14,15 +14,26 @@
 #include <QTableView>
 #include <QHeaderView>
 #include <QStandardItemModel>
+#include <QItemSelectionModel>
 #include <QFileDialog>
 #include <QDir>
 #include <QString>
+#include <QStringList>
 #include <QMenuBar>
 #include <QToolBar>
 #include <QStatusBar>
 #include <QMenu>
 #include <QAction>
 #include <QModelIndex>
+#include <QMessageBox>
+#include <QModelIndex>
+#include <QKeyEvent>
+#include <QPrintDialog>
+#include <QPrinter>
+#include <QTextDocument>
+#include <QPainter>
+#include <QImage>
+#include <QPaintEvent>
 #include "CAR.h"
 #include "VECTOR.h"
 
@@ -32,10 +43,14 @@ class MainWindow : public QMainWindow
     QIcon *icon;
     QString *styleSheet;
 
-    QHBoxLayout *hlayout;
+    QLabel *lableFoto;
+
+
+    QVBoxLayout *vlayout;
 
     QTableView *tableData;
     QStandardItemModel *model{NULL};
+    bool modalChanged = false;
 
     QStatusBar *statusBar;
 
@@ -73,8 +88,11 @@ public:
 
     void loadData();
 signals:
-private:
-   // void closeEvent(QCloseEvent *event) override;
+    void appearNewCar();
+protected:
+    void closeEvent(QCloseEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
+   // void paintEvent(QPaintEvent *event) override;
     void setMainMenuBar();
     void setFileMenu();
     void setSettingMenu();
@@ -93,8 +111,12 @@ private slots:
     void saveAsDataToFile();
     void cellDataChenged(QStandardItem* item);
     void addNewCar();
-    void createNewCar();
-
+    void addNewCarToModel();
+    void deleteCarFromTable();
+    void createNewTable();
+    void showInfo();
+    void printTable();
+    void showFotoOfCar(const QModelIndex &index);
 
 };
 #endif // MAINWINDOW_H

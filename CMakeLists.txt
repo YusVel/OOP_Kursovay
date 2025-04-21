@@ -12,6 +12,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
+
 set(PROJECT_SOURCES
         main.cpp
         mainwindow.cpp
@@ -24,6 +25,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ${PROJECT_SOURCES}
         VECTOR.h VECTOR.cpp
         CAR.h CAR.cpp
+
 
     )
 # Define target properties for Android with Qt 6 as:
@@ -43,6 +45,9 @@ else()
         )
     endif()
 endif()
+
+find_package(Qt6 REQUIRED COMPONENTS PrintSupport)
+target_link_libraries(Kursovay PRIVATE Qt6::PrintSupport)
 
 target_link_libraries(Kursovay PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 
