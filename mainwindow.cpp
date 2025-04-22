@@ -13,10 +13,29 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
     setStatusBar();
 
     lableFoto = new QLabel(this);
+    lableFoto->setStyleSheet("border: 1px solid grey;");
     lableFoto->setText("FOTO");
+    lableFoto->setAlignment(Qt::AlignCenter);
     lableFoto->setGeometry(QRect(260,360,540,335));
     lableFoto->setScaledContents(true);
 
+    nextFoto = new QPushButton(">>>>>",this);
+    nextFoto->setGeometry(799,359,100,25);
+    QObject::connect(nextFoto,&QPushButton::clicked,this,[this](){
+        this->indexFoto++;
+        this->tableData->clicked((this->tableData)->currentIndex());
+        qDebug()<<"IndexFoto: "<<indexFoto;
+    });
+    previosFoto = new QPushButton("<<<<<",this);
+    previosFoto->setGeometry(161,359,100,25);
+    QObject::connect(previosFoto,&QPushButton::clicked,this,[this](){
+        this->indexFoto--;
+        this->tableData->clicked((this->tableData)->currentIndex());
+        qDebug()<<"IndexFoto: "<<indexFoto;
+    });
+
+    nextFoto->setEnabled(false);
+    previosFoto->setEnabled(false);
 
     vlayout = new QVBoxLayout;
     vlayout->addWidget(tableData);
@@ -42,10 +61,6 @@ MainWindow::~MainWindow() {
 
 }
 
-void MainWindow::loadData()
-{
-
-}
 
 void MainWindow::setMainMenuBar()
 {
@@ -511,9 +526,28 @@ void MainWindow::showFotoOfCar(const QModelIndex &index)
         pathf = "E:\\Qtprojects\\Kursovay\\Foto\\NoFoto.jpg";
         QPixmap pixMap(pathf);
         lableFoto->setPixmap(pixMap);
+        nextFoto->setEnabled(false);
+        previosFoto->setEnabled(false);
+        indexFoto=0;
     }
     else {
-        pathf = DATA[indexCar].picturesPath[0];
+        if(indexFoto>=sizeListFotos)
+        {
+            nextFoto->setEnabled(false);
+            previosFoto->setEnabled(true);
+            indexFoto=sizeListFotos-1;
+        }
+        if(indexFoto<sizeListFotos-1&&indexFoto>0)
+        {
+            nextFoto->setEnabled(true);
+            previosFoto->setEnabled(true);
+        }
+        if(indexFoto==0&&sizeListFotos>0)
+        {
+            nextFoto->setEnabled(true);
+            previosFoto->setEnabled(false);
+        }
+        pathf = DATA[indexCar].picturesPath[indexFoto];
         pathf.replace("/","\\");
         QPixmap pixMap(pathf);
         lableFoto->setPixmap(pixMap);
@@ -556,25 +590,4 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
         this->deleteCarTool->trigger();
     }
 }
-/*
-void MainWindow::paintEvent(QPaintEvent *event)
-{
 
-
-    //lableFoto->setText("E:\\Qtprojects\\Kursovay\\Foto\\BattleHorse.jpg");
-    lableFoto->setPixmap(QPixmap("E:\\Qtprojects\\Kursovay\\Foto\\BattleHorse.jpg"));
-    lableFoto->setGeometry(QRect(400,355,1030,300));
-
-    QString pathFoto = "E:\\Qtprojects\\Kursovay\\Foto\\BattleHorse.jpg"; //QFileDialog::getOpenFileName(this,"Укажите путь к ФОТО","*.jpg");
-    pathFoto.replace("/","\\");
-    qDebug()<<pathFoto;
-    QImage image(pathFoto);
-    if(image.isNull()){qDebug()<<"pathFoto - failed";}
-    QPainter *painter = new QPainter(this);
-
-    painter->begin(this);
-    painter->drawImage(this->x()-500,this->y()+178,image);
-    painter->end();
-
-}
-*/

@@ -44,7 +44,8 @@ class MainWindow : public QMainWindow
     QString *styleSheet;
 
     QLabel *lableFoto;
-
+    QPushButton *nextFoto;
+    QPushButton *previosFoto;
 
     QVBoxLayout *vlayout;
 
@@ -81,18 +82,16 @@ class MainWindow : public QMainWindow
     QWidget *addCAR;
 
     VECTOR<CAR> DATA;
+    ushort indexFoto{0};
     //CAR *newCAR;
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-
-    void loadData();
 signals:
     void appearNewCar();
 protected:
     void closeEvent(QCloseEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
-   // void paintEvent(QPaintEvent *event) override;
     void setMainMenuBar();
     void setFileMenu();
     void setSettingMenu();
