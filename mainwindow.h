@@ -64,6 +64,8 @@ class MainWindow : public QMainWindow
     QAction *deleteCarTool;
     QAction *printTool;
     QAction *helpTool;
+    QAction *increaseTool;
+    QAction *decreaseTool;
 
     QMenuBar *mainMenuBar;
 
@@ -116,6 +118,8 @@ private slots:
     void showInfo();
     void printTable();
     void showFotoOfCar(const QModelIndex &index);
+    void sortIncrease();
+    void sortDecrease();
 
 };
 #endif // MAINWINDOW_H

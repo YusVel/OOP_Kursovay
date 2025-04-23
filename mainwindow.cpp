@@ -124,8 +124,19 @@ void MainWindow::setToolBar()
     deleteCarTool->setToolTip("Удалить");
     printTool = toolBar->addAction(QIcon(QDir::current().absolutePath()+QString("/source/printIco.ico")),"",QKeySequence("Ctrl+P"));
     printTool->setToolTip("Печать");
+    increaseTool = toolBar->addAction(QIcon(QDir::current().absolutePath()+QString("/source/increaseIco.ico")),"");
+    increaseTool->setToolTip("Сортировать по возрастанию");
+    decreaseTool = toolBar->addAction(QIcon(QDir::current().absolutePath()+QString("/source/decreaseIco.ico")),"");
+    decreaseTool->setToolTip("Сортировать по убыванию");
     helpTool = toolBar->addAction(QIcon(QDir::current().absolutePath()+QString("/source/helpIco.ico")),"");
     helpTool->setToolTip("Справка");
+
+    increaseTool->setEnabled(false);
+    decreaseTool->setEnabled(false);
+    QObject::connect(tableData,&QTableView::clicked,this,[this](){
+        increaseTool->setEnabled(true);
+        decreaseTool->setEnabled(true);
+    });
 
     QObject::connect(openFileTool,SIGNAL(triggered()),this,SLOT(setFileNameToOpen()));
     QObject::connect(saveFileTool,SIGNAL(triggered()),this,SLOT(saveDataToFile()));
@@ -135,6 +146,8 @@ void MainWindow::setToolBar()
     QObject::connect(addTableTool,SIGNAL(triggered()),this,SLOT(createNewTable()));
     QObject::connect(helpTool,SIGNAL(triggered()),this,SLOT(showInfo()));
     QObject::connect(printTool,SIGNAL(triggered()),this, SLOT(printTable()));
+    QObject::connect(increaseTool,SIGNAL(triggered()),this,SLOT(sortIncrease()));
+    QObject::connect(decreaseTool,SIGNAL(triggered()),this, SLOT(sortDecrease()));
 
     this->addToolBar(Qt::TopToolBarArea,toolBar);
 }
@@ -301,8 +314,6 @@ void MainWindow::addNewCar()//*************************
     addCAR->setAttribute(Qt::WA_DeleteOnClose,true);
     addCAR->setWindowModality(Qt::WindowModal);
     addCAR->setFixedSize(400,350);
-
-
 
     QCompleter *completer = new QCompleter(CAR::listModels,addCAR);
     completer->setCaseSensitivity(Qt::CaseInsensitive);
@@ -507,14 +518,20 @@ void MainWindow::showInfo()
 
 void MainWindow::printTable()
 {
-    QPrinter printer;
-    printer.setPrinterName("You printer");
-    QPrintDialog dialog(&printer,this);
+    QPrinter printer1;
+
+    printer1.setPrinterName("You printer1");
+    QPrintDialog dialog(&printer1,this);
     if(dialog.exec()==QDialog::Rejected){return;}
-    //tableData->render(&printer);
     QTextDocument doc(this);
-    doc.setPlainText(DATA[0].prepareToPrint());
-    doc.print(&printer);
+    QString  text;
+    //QPainter painter(&printer1);
+    for(int i = 0;i<DATA.getSize();i++)
+    {
+        text+=DATA[i].prepareToPrint();
+    }
+    doc.setPlainText(text);
+    doc.print(&printer1);
 }
 
 void MainWindow::showFotoOfCar(const QModelIndex &index)
@@ -554,7 +571,31 @@ void MainWindow::showFotoOfCar(const QModelIndex &index)
     }
 }
 
+void MainWindow::sortIncrease()
+{
+    QModelIndex i = tableData->currentIndex();
+    if(i.isValid()&&i.column()<MAX_SPEC)
+    {
+        qDebug()<<"Сортировка по "<<i.column() <<"столбцу.";
+        DATA.sort_increase(i.column());
+        this->addNewCarToModel();
+    }
+    increaseTool->setEnabled(false);
+    decreaseTool->setEnabled(false);
+}
 
+void MainWindow::sortDecrease()
+{
+    QModelIndex i = tableData->currentIndex();
+    if(i.isValid()&&i.column()<MAX_SPEC)
+    {
+        qDebug()<<"Сортировка по "<<i.column() <<"столбцу.";
+        DATA.sort_decrease(i.column());
+        this->addNewCarToModel();
+    }
+    increaseTool->setEnabled(false);
+    decreaseTool->setEnabled(false);
+}
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
