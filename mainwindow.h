@@ -70,7 +70,6 @@ class MainWindow : public QMainWindow
     QMenuBar *mainMenuBar;
 
     QMenu *settingMenu;
-    QMenu *helpMenu;
 
     QMenu *fileMenu;
     QAction *openFile;
@@ -97,7 +96,6 @@ protected:
     void setMainMenuBar();
     void setFileMenu();
     void setSettingMenu();
-    void setHelpMenu();
     void setTableView();
     void setToolBar();
     void setStatusBar();

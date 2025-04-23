@@ -67,7 +67,6 @@ void MainWindow::setMainMenuBar()
     mainMenuBar = new QMenuBar(this);
     setFileMenu();
     setSettingMenu();
-    setHelpMenu();
     this->setMenuBar(mainMenuBar);
 }
 
@@ -91,13 +90,6 @@ void MainWindow::setSettingMenu()
     settingMenu = new QMenu(tr("Настройки"),this);
 
     mainMenuBar->addMenu(settingMenu);
-}
-
-void MainWindow::setHelpMenu()
-{
-    helpMenu = new QMenu(tr("Справка"),this);
-
-    mainMenuBar->addMenu(helpMenu);
 }
 
 void MainWindow::setTableView()
