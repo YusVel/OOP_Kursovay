@@ -8,23 +8,7 @@ int main(int argc, char *argv[])
 
     try
    {
-        /*
-        const int N  = 10;
-        VECTOR<CAR> arr;
-        arr.readFromFile("newB.base");
-        arr.sort_increase();
-        arr.sort_increase();
-        arr.sort_increase();
-        arr.sort_increase();
-        arr.sort_increase();
-        arr.sort_increase();
-        arr.sort_increase();
-        arr.sort_increase();
-        for(int i = 0;i<arr.getSize();i++)
-        {
-            qDebug()<<arr[i];
-        }
-        */
+
         w.show();
     }
     catch (const char * error)
@@ -33,5 +17,5 @@ int main(int argc, char *argv[])
     }
 
     return a.exec();
-    //return 0;
+
 }

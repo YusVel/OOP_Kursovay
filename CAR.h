@@ -110,14 +110,14 @@ public:
     QString prepareToPrint()
     {
         return QString("Марка/Модель: "+this->getBrandStr()+"\n"
-               +"\tЦена: "+this->getPriceStr()+" тыс. рублей\n"
-               +"\tГод выпуска: "+this->getYearOfManufactureStr()+" г.\n"
-               +"\tОбъём двигателя: "+this->getEngineCapacityStr()+" см. куб\n"
-               +"\tМощность: "+this->getPowerStr()+" л.с\n"
-               +"\tМасимальная скорость: "+this->getMaxSpeedStr()+" км/ч\n"
-               +"\tУскорение: 100 км/ч за "+this->getAccelerationStr()+" мс\n"
-               +"\tРасход товлива на 100 км: "+this->getFuelRateStr()+" мл\n"
-               +"\tДорожный просвет: "+this->getClearenceStr()+" мм\n");
+               +"     Цена: "+this->getPriceStr()+" тыс. рублей\n"
+               +"     Год выпуска: "+this->getYearOfManufactureStr()+" г.\n"
+               +"     Объём двигателя: "+this->getEngineCapacityStr()+" см. куб\n"
+               +"     Мощность: "+this->getPowerStr()+" л.с\n"
+               +"     Масимальная скорость: "+this->getMaxSpeedStr()+" км/ч\n"
+               +"     Ускорение: 100 км/ч за "+this->getAccelerationStr()+" мс\n"
+               +"     Расход товлива на 100 км: "+this->getFuelRateStr()+" мл\n"
+               +"     Дорожный просвет: "+this->getClearenceStr()+" мм\n");
     }
 
 };

@@ -10,6 +10,7 @@
 #include <QCompleter>
 #include <QSpinBox>
 #include <QLabel>
+#include <QTextEdit>
 #include <QIcon>
 #include <QTableView>
 #include <QHeaderView>
@@ -46,6 +47,12 @@ class MainWindow : public QMainWindow
     QLabel *lableFoto;
     QPushButton *nextFoto;
     QPushButton *previosFoto;
+
+    QTextEdit *textEdit;
+
+    QPushButton *addNewFoto;
+    QPushButton *changeListFoto;
+    QPushButton *deleteFoto;
 
     QVBoxLayout *vlayout;
 
@@ -118,6 +125,10 @@ private slots:
     void showFotoOfCar(const QModelIndex &index);
     void sortIncrease();
     void sortDecrease();
+    void deleteFotoOfCar();
+    void addFotoOfCar();
+    void changeFotosOfCar();
+
 
 };
 #endif // MAINWINDOW_H

@@ -167,6 +167,7 @@ QString CAR::getSpecsStr(int index)
     case 6: return getAccelerationStr(); break;
     case 7: return getFuelRateStr(); break;
     case 8: return getClearenceStr(); break;
+    default: return "";break;
     }
 }
 //////////////////////////////////////////////////////////
