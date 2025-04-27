@@ -110,7 +110,6 @@ inline void MainWindow::setFileMenu()
 inline void MainWindow::setSettingMenu()
 {
     settingMenu = new QMenu(tr("Настройки"),this);
-
     mainMenuBar->addMenu(settingMenu);
 }
 
