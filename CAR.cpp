@@ -151,7 +151,7 @@ QString CAR::getFuelRateStr()
 
 QString CAR::getClearenceStr()
 {
-    return QString("%1").arg(spec[FUEL_RATE]);
+    return QString("%1").arg(spec[CLEARENCE]);
 }
 
 QString CAR::getSpecsStr(int index)
