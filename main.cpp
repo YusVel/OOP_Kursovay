@@ -5,10 +5,8 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     MainWindow w;
-
     try
-   {
-
+    {
         w.show();
     }
     catch (const char * error)
@@ -17,5 +15,4 @@ int main(int argc, char *argv[])
     }
 
     return a.exec();
-
 }

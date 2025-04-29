@@ -21,18 +21,15 @@ enum SPECIFICATIONS
     FUEL_RATE,
     CLEARENCE
 };
-
 class CAR
 {
 private:
-
     ushort *spec;
 public:
     QStringList picturesPath;
 public:
     static unsigned int carsQuantity;
     static QStringList listModels;
-
     CAR();
     CAR(CAR &other);
     CAR& operator=(const CAR &other);
@@ -47,7 +44,6 @@ public:
     void setFuelRate(ushort fuelRate);
     void setClearence(ushort clearence);
     void setPicturesPaths(QStringList& path);
-
     QString getBrandStr();
     QString getYearOfManufactureStr();
     QString getPriceStr();
@@ -57,10 +53,8 @@ public:
     QString getAccelerationStr();
     QString getFuelRateStr();
     QString getClearenceStr();
-
     QString getSpecsStr(int index);
     ushort getSpecs(SPECIFICATIONS index);
-
     ushort getBrand();
     ushort getYearOfManufacture();
     ushort getPrice();
@@ -73,7 +67,6 @@ public:
     CAR& randomize(long rand);
     QString getBrandModel();
     void addNewBrandModel(QString newBrandModel);
-
     friend QDebug operator<<(QDebug stream, CAR &item)
     {
         stream<<item.getBrandModel()<<'\t'
@@ -119,7 +112,5 @@ public:
                +"     Расход товлива на 100 км: "+this->getFuelRateStr()+" мл\n"
                +"     Дорожный просвет: "+this->getClearenceStr()+" мм\n");
     }
-
 };
-
 #endif // CAR_H

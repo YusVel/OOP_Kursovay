@@ -75,7 +75,6 @@ class MainWindow : public QMainWindow
     QLineEdit *searchLine;
     QAction *helpTool;
 
-
     QMenuBar *mainMenuBar;
 
     QMenu *settingMenu;
@@ -131,8 +130,5 @@ private slots:
     void addFotoOfCar();
     void changeFotosOfCar();
     void searchForNameOfBrandOnLineEdite(const QString &text);
-
-
-
 };
 #endif // MAINWINDOW_H

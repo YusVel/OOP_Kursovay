@@ -5,7 +5,6 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
-
 template<typename T>
 class VECTOR
 {
@@ -39,8 +38,6 @@ private:
         VECTOR<T>::ITERATOR& operator+=(const unsigned long offset);
         T&operator*();
     };
-
-
 public:
     VECTOR();
     VECTOR(const unsigned long capacity_);
@@ -60,7 +57,6 @@ public:
     T&operator[]( const long index);
     void writeToFile(const QString &pathToFile);
     void readFromFile(QString pathToFile);
-
 private:
     void relocate(const unsigned long newSize);
     bool makeMaxOrMinParentBySwap(T&parent, T&leftChild, T&rightChild, int &chanchedChild, int increaseOrdecrease, int parametr);
