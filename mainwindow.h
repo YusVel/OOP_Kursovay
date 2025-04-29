@@ -69,10 +69,12 @@ class MainWindow : public QMainWindow
     QAction *addTableTool;
     QAction *addCarTool;
     QAction *deleteCarTool;
-    QAction *printTool;
-    QAction *helpTool;
     QAction *increaseTool;
     QAction *decreaseTool;
+    QAction *printTool;
+    QLineEdit *searchLine;
+    QAction *helpTool;
+
 
     QMenuBar *mainMenuBar;
 
@@ -128,6 +130,8 @@ private slots:
     void deleteFotoOfCar();
     void addFotoOfCar();
     void changeFotosOfCar();
+    void searchForNameOfBrandOnLineEdite(const QString &text);
+
 
 
 };

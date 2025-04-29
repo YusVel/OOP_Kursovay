@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
 
     textEdit = new QTextEdit(this);
     textEdit->setEnabled(false);
-    textEdit->setGeometry(QRect(10,388,245,307));
+    textEdit->setGeometry(QRect(10,388,255,307));
     textEdit->setStyleSheet("border: 1px solid grey;");
     QObject::connect(tableData,&QTableView::clicked,this,[this](){
         QModelIndex index = this->tableData->currentIndex();
@@ -28,18 +28,18 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
     lableFoto->setStyleSheet("border: 1px solid grey;");
     lableFoto->setText("FOTO");
     lableFoto->setAlignment(Qt::AlignCenter);
-    lableFoto->setGeometry(QRect(260,360,540,335));
+    lableFoto->setGeometry(QRect(270,360,520,335));
     lableFoto->setScaledContents(true);
 
     nextFoto = new QPushButton(">>>>>",this);
-    nextFoto->setGeometry(799,359,100,25);
+    nextFoto->setGeometry(789,359,100,25);
     QObject::connect(nextFoto,&QPushButton::clicked,this,[this](){
         this->indexFoto++;
         this->tableData->clicked((this->tableData)->currentIndex());
         qDebug()<<"IndexFoto: "<<indexFoto;
     });
     previosFoto = new QPushButton("<<<<<",this);
-    previosFoto->setGeometry(161,359,100,25);
+    previosFoto->setGeometry(171,359,100,25);
     QObject::connect(previosFoto,&QPushButton::clicked,this,[this](){
         this->indexFoto--;
         this->tableData->clicked((this->tableData)->currentIndex());
@@ -49,11 +49,11 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent)
     previosFoto->setEnabled(false);
 
     addNewFoto = new QPushButton(QIcon(QDir::current().absolutePath()+QString("/source/plusFotoIco.ico")),"Добавить",this);
-    addNewFoto->setGeometry(799,419,100,25);
+    addNewFoto->setGeometry(789,419,100,25);
     changeListFoto = new QPushButton(QIcon(QDir::current().absolutePath()+QString("/source/changeFotosIco.ico")),"Изменить",this);
-    changeListFoto->setGeometry(799,449,100,25);
+    changeListFoto->setGeometry(789,449,100,25);
     deleteFoto = new QPushButton(QIcon(QDir::current().absolutePath()+QString("/source/deleteFotoIco.ico")),"Удалить",this);
-    deleteFoto->setGeometry(799,479,100,25);
+    deleteFoto->setGeometry(789,479,100,25);
 
     QObject::connect(deleteFoto,SIGNAL(clicked()),this,SLOT(deleteFotoOfCar()));
     QObject::connect(changeListFoto,SIGNAL(clicked()),this,SLOT(changeFotosOfCar()));
@@ -141,6 +141,12 @@ inline void MainWindow::setToolBar()
     increaseTool->setToolTip("Сортировать по возрастанию");
     decreaseTool = toolBar->addAction(QIcon(QDir::current().absolutePath()+QString("/source/decreaseIco.ico")),"");
     decreaseTool->setToolTip("Сортировать по убыванию");
+
+    searchLine = new QLineEdit(toolBar);
+    searchLine->setFixedWidth(300);
+    searchLine->setPlaceholderText("Поиск по названию марки авто...");
+
+    toolBar->addWidget(searchLine);
     helpTool = toolBar->addAction(QIcon(QDir::current().absolutePath()+QString("/source/helpIco.ico")),"");
     helpTool->setToolTip("Справка");
 
@@ -161,6 +167,8 @@ inline void MainWindow::setToolBar()
     QObject::connect(printTool,SIGNAL(triggered()),this, SLOT(printTable()));
     QObject::connect(increaseTool,SIGNAL(triggered()),this,SLOT(sortIncrease()));
     QObject::connect(decreaseTool,SIGNAL(triggered()),this, SLOT(sortDecrease()));
+
+    QObject::connect(searchLine,SIGNAL(textEdited(QString)),this,SLOT(searchForNameOfBrandOnLineEdite(QString)));
 
     this->addToolBar(Qt::TopToolBarArea,toolBar);
 }
@@ -514,7 +522,7 @@ void MainWindow::deleteCarFromTable()
         {
             this->DATA.erase(index.row());
             this->addNewCarToModel();
-            QString pathf =QDir::current().absolutePath() + "\\Foto\\NoFoto.jpg";
+            QString pathf =QDir::current().absolutePath() + "\\Foto\\NoFoto.png";
             pathf.replace("/","\\");
             QPixmap pixMap(pathf);
             lableFoto->setPixmap(pixMap);
@@ -535,7 +543,7 @@ void MainWindow::createNewTable()
 
 void MainWindow::showInfo()
 {
-    QMessageBox *message = new QMessageBox(QMessageBox::Information,"Общая информация","Велиметов Юсуп Касумович\nПИБ 32з\n2-курс\nPER ASPERA AD ASTRA!",QMessageBox::Ok,this);
+    QMessageBox *message = new QMessageBox(QMessageBox::Information,"Общая информация","Велиметов Юсуп Касумович\nПИБ 32з\n2-курс\nКурсовая работа по ООП\nВариант 4:class CAR\nPER ASPERA AD ASTRA!",QMessageBox::Ok,this);
     message->show();
 }
 
@@ -563,9 +571,10 @@ void MainWindow::showFotoOfCar(const QModelIndex &index)
     int indexCar = index.row();
     int sizeListFotos = DATA[indexCar].picturesPath.size();
     if(sizeListFotos==0){
-        pathf =QDir::current().absolutePath() + "\\Foto\\NoFoto.jpg";
+        pathf =QDir::current().absolutePath() + "\\Foto\\NoFoto.png";
         pathf.replace("/","\\");
         QPixmap pixMap(pathf);
+        pixMap.scaled(lableFoto->size());
         lableFoto->setPixmap(pixMap);
         nextFoto->setEnabled(false);
         previosFoto->setEnabled(false);
@@ -591,6 +600,7 @@ void MainWindow::showFotoOfCar(const QModelIndex &index)
         pathf = DATA[indexCar].picturesPath[indexFoto];
         pathf.replace("/","\\");
         QPixmap pixMap(pathf);
+        pixMap.scaled(lableFoto->size());
         lableFoto->setPixmap(pixMap);
     }
 }
@@ -646,7 +656,7 @@ void MainWindow::addFotoOfCar()
     QModelIndex index = tableData->currentIndex();
     if(index.isValid())
     {
-        DATA[index.row()].picturesPath.append(QFileDialog::getOpenFileName(NULL,"Открыть","*.jpg"));
+        DATA[index.row()].picturesPath.append(QFileDialog::getOpenFileName(NULL,"Открыть","*.png"));
         modalChanged = true;
         addNewCarToModel();
         indexFoto++;
@@ -661,7 +671,7 @@ void MainWindow::changeFotosOfCar()
     QModelIndex index = tableData->currentIndex();
     if(index.isValid())
     {
-        DATA[index.row()].picturesPath = QFileDialog::getOpenFileNames(NULL,"Открыть","*.jpg");
+        DATA[index.row()].picturesPath = QFileDialog::getOpenFileNames(NULL,"Открыть","*.png");
         modalChanged = true;
         addNewCarToModel();
         indexFoto=0;
@@ -669,6 +679,34 @@ void MainWindow::changeFotosOfCar()
         tableData->clicked(index);
         previosFoto->setEnabled(false);
     }
+}
+
+void MainWindow::searchForNameOfBrandOnLineEdite(const QString &text)
+{
+    if(model==NULL){statusBar->showMessage("Что Вы собрались искать в пустой таблице???",3000);}
+    else if(text=="")
+    {
+        for(int i = 0;i<model->rowCount();i++)
+        {
+            tableData->setRowHidden(i,false);
+        }
+    }
+    else
+    {
+       for(int i = 0;i<model->rowCount();i++)
+        {
+            if(!(model->item(i,0)->data(0).toString().contains(text)))
+            {
+                tableData->setRowHidden(i,true);
+            }
+            else
+            {
+                tableData->setRowHidden(i,false);
+                qDebug()<<"["<<i<<"]"<< model->item(i,0)->data(0).toString();
+            }
+        }
+    }
+
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
